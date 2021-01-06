@@ -1,25 +1,33 @@
 package seung.kimchi.java.utils;
 
-import java.math.BigInteger;
-
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import java.security.PublicKey;
+import java.security.cert.X509Certificate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-public class SSignCertDer {
+@Slf4j
+public class SCertificate {
 
-	private byte[] encoded;
+	private X509Certificate x509Certificate;
 	private String type;
 	private int version;
-	private BigInteger serialNumber;
+	private String serialNumber;
 	private String serialNumberHex;
 	private String sigAlgOID;
 	private String sigAlgName;
@@ -27,10 +35,10 @@ public class SSignCertDer {
 	private String subjectDN;
 	private long notBefore;
 	private long notAfter;
-	private byte[] publicKey;
+	private PublicKey publicKey;
 	private String publicKeyFormat;
 	private String publicKeyAlgorithm;
-	private byte[] signPriKey;
+	private List<String> crlDistPointList;
 	
 	public String toJsonString(boolean isPretty) {
 		String jsonString = "";
@@ -43,6 +51,7 @@ public class SSignCertDer {
 					.writeValueAsString(this)
 					;
 		} catch (JsonProcessingException e) {
+			log.error("Failed to convert to json format text.", e);
 		}
 		return jsonString;
 	}
