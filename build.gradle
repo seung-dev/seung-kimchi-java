@@ -3,7 +3,7 @@ plugins {
 }
 
 version = "1.0.0"
-group = "seung.kimchi.java"
+group = "seung.kimchi"
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
