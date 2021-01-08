@@ -90,7 +90,7 @@ public class SConvert {
 	 * map.put("key2", "value2");
 	 * System.out.println(SConvert.stringify(map, 0, "  "));
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @see {@link #stringify(Object, int, String)}
 	 * @author seung
@@ -121,7 +121,7 @@ public class SConvert {
 	 * System.out.println(SConvert.stringify(map, 0, "  "));
 	 * System.out.println(SConvert.stringify(map, 1, "  "));
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @param isPretty - 0: {@link Boolean#FALSE}, 1: {@link Boolean#TRUE}
 	 * @see {@link #stringify(Object, int, String)}
@@ -145,7 +145,7 @@ public class SConvert {
 	 * System.out.println(SConvert.stringify(map, 1, "    "));
 	 * System.out.println(SConvert.stringify(map, 1, "\t"));
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @param isPretty - 0: {@link Boolean#FALSE}, 1: {@link Boolean#TRUE}
 	 * @param indent - default: 2 spaces
@@ -215,7 +215,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(decoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param encoded
 	 * @see {@link SConvert#decodeBase64String(byte[], String)}
 	 * @author seung
@@ -244,7 +244,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(decoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param encoded
 	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
 	 * @see {@link SConvert#decodeBase64String(byte[], String)}
@@ -275,7 +275,7 @@ public class SConvert {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param encoded
 	 * @see {@link Base64#decodeBase64(byte[])}
 	 * @author seung
@@ -299,7 +299,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(encoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
 	 * @see {@link SConvert#encodeBase64(byte[])}
@@ -330,7 +330,7 @@ public class SConvert {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @see {@link Base64#encodeBase64(byte[])}
 	 * @author seung
@@ -361,7 +361,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(decoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param encoded
 	 * @see {@link SConvert#decodeHexString(String, String)}
 	 * @author seung
@@ -384,7 +384,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(decoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
 	 * @see {@link SConvert#decodeHex(String)}
@@ -416,7 +416,7 @@ public class SConvert {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param encoded
 	 * @see {@link Hex#decodeHex(String)}
 	 * @author seung
@@ -446,7 +446,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(encoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @param toLowerCase
 	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
@@ -476,7 +476,7 @@ public class SConvert {
 	 *   , true
 	 *   );
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
 	 * @author seung
@@ -505,7 +505,7 @@ public class SConvert {
 	 *   );
 	 * System.out.println(encoded);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param data
 	 * @param toLowerCase
 	 * @see {@link Base64#encodeBase64(byte[])}
@@ -528,7 +528,7 @@ public class SConvert {
 	 *   System.out.println(charset);
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21

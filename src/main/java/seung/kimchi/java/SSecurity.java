@@ -71,7 +71,7 @@ public class SSecurity {
 	 *   );
 	 * System.out.println(digested);
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param data
 	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
@@ -119,7 +119,7 @@ public class SSecurity {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param data
 	 * @see {@link SSecurity#digest(String, String, int, byte[])}
@@ -161,7 +161,7 @@ public class SSecurity {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param provider {@value BouncyCastleProvider#PROVIDER_NAME}
 	 * @param data
@@ -207,7 +207,7 @@ public class SSecurity {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
 	 * </pre>
-	 * <hr></hr>
+	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param provider {@value BouncyCastleProvider#PROVIDER_NAME}
 	 * @param iteration
