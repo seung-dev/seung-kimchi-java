@@ -1,5 +1,6 @@
 package seung.kimchi.java;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -12,6 +13,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import lombok.extern.slf4j.Slf4j;
 import seung.kimchi.java.utils.SAlgorithm;
+import seung.kimchi.java.utils.SCharset;
 import seung.kimchi.java.utils.SLinkedHashMap;
 
 @Slf4j
@@ -45,8 +47,59 @@ public class SSecurity {
 	 * Convert to digested data.
 	 * </pre>
 	 * <h1>Usage</h1>
+	 * SLinkedHashMap data = new SLinkedHashMap()
+	 *   .add("key1", "value1")
+	 *   .add("key2", "value2")
+	 *   ;
+	 * String digested = SSecurity.digest(SAlgorithm._MD5, data);
+	 * System.out.println(digested);
 	 * <pre>
-	 * byte[] digested = SConvert.digest(
+	 * <h1>Equal</h1>
+	 * <pre>
+	 * SLinkedHashMap data = new SLinkedHashMap()
+	 *   .add("key1", "value1")
+	 *   .add("key2", "value2")
+	 *   ;
+	 * String digested = SConvert.encodeHexString(
+	 *   digest(
+	 *     SAlgorithm._MD5
+	 *     , ""
+	 *     , 1
+	 *     , SConvert.stringify(data).getBytes(SCharset._UTF_8)
+	 *     )
+	 *   , true
+	 *   );
+	 * System.out.println(digested);
+	 * </pre>
+	 * <hr/>
+	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
+	 * @param data
+	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
+	 * @see {@link SSecurity#digest(String, String, int, byte[])}
+	 * @author seung
+	 * @since 2021.01.06
+	 * @version 1.0.0
+	 */
+	public static String digest(
+			String algorithm
+			, Object data
+			) {
+		String digested = "";
+		try {
+			digested = SConvert.encodeHexString(digest(algorithm, "", 1, SConvert.stringify(data).getBytes(SCharset._UTF_8)), true);
+		} catch (UnsupportedEncodingException e) {
+			log.error("Failed to digest data.", e);
+		}
+		return digested;
+	}
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * Convert to digested data.
+	 * </pre>
+	 * <h1>Usage</h1>
+	 * <pre>
+	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , "data".getBytes()
 	 *   );
@@ -56,7 +109,7 @@ public class SSecurity {
 	 * </pre>
 	 * <h1>Equal</h1>
 	 * <pre>
-	 * byte[] digested = SConvert.digest(
+	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , null
 	 *   , 1
@@ -69,7 +122,7 @@ public class SSecurity {
 	 * <hr/>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param data
-	 * @see {@link SConvert#digest(String, String, int, byte[])}
+	 * @see {@link SSecurity#digest(String, String, int, byte[])}
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -87,7 +140,7 @@ public class SSecurity {
 	 * </pre>
 	 * <h1>Usage</h1>
 	 * <pre>
-	 * byte[] digested = SConvert.digest(
+	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , 1
 	 *   , "data".getBytes()
@@ -98,7 +151,7 @@ public class SSecurity {
 	 * </pre>
 	 * <h1>Equal</h1>
 	 * <pre>
-	 * byte[] digested = SConvert.digest(
+	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , null
 	 *   , 1
@@ -112,7 +165,7 @@ public class SSecurity {
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param provider {@value BouncyCastleProvider#PROVIDER_NAME}
 	 * @param data
-	 * @see {@link SConvert#digest(String, String, int, byte[])}
+	 * @see {@link SSecurity#digest(String, String, int, byte[])}
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -133,7 +186,7 @@ public class SSecurity {
 	 * <pre>
 	 * byte[] digested = null;
 	 * // without provider
-	 * digested = SConvert.digest(
+	 * digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , null
 	 *   , 1
@@ -144,7 +197,7 @@ public class SSecurity {
 	 * }
 	 * // with provider
 	 * Security.addProvider(new BouncyCastleProvider());
-	 * digested = SConvert.digest(
+	 * digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , BouncyCastleProvider.PROVIDER_NAME
 	 *   , 1
@@ -159,7 +212,6 @@ public class SSecurity {
 	 * @param provider {@value BouncyCastleProvider#PROVIDER_NAME}
 	 * @param iteration
 	 * @param data
-	 * @see {@link SConvert#availableAlgorithm()}
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
