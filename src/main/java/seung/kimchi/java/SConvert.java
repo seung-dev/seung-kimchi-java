@@ -92,7 +92,7 @@ public class SConvert {
 	 * @version 1.0.0
 	 */
 	public static String stringify(Object data) {
-		return stringify(data, 0, "  ");
+		return stringify(data, false, "  ");
 	}
 	/**
 	 * <h1>Description</h1>
@@ -117,13 +117,13 @@ public class SConvert {
 	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @param isPretty - 0: {@link Boolean#FALSE}, 1: {@link Boolean#TRUE}
+	 * @param isPretty - {@link Boolean#FALSE}, {@link Boolean#TRUE}
 	 * @see #stringify(Object, int, String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
 	 */
-	public static String stringify(Object data, int isPretty) {
+	public static String stringify(Object data, boolean isPretty) {
 		return stringify(data, isPretty, "  ");
 	}
 	/**
@@ -141,7 +141,7 @@ public class SConvert {
 	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @param isPretty - 0: {@link Boolean#FALSE}, 1: {@link Boolean#TRUE}
+	 * @param isPretty - {@link Boolean#FALSE}, {@link Boolean#TRUE}
 	 * @param indent - default: 2 spaces
 	 * @see ObjectMapper#writeValueAsString(Object)
 	 * @see ObjectMapper#writerWithDefaultPrettyPrinter()
@@ -155,7 +155,7 @@ public class SConvert {
 	 * @since 2021.01.04
 	 * @version 1.0.0
 	 */
-	public static String stringify(Object data, int isPretty, String indent) {
+	public static String stringify(Object data, boolean isPretty, String indent) {
 		String json = "";
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -165,7 +165,7 @@ public class SConvert {
 					jsonGenerator.writeFieldName("");
 				}
 			});
-			if(1 == isPretty) {
+			if(isPretty) {
 				if(indent == null) {
 					indent = "  ";
 				}
