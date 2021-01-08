@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  * <pre>
  * Text Data Type Handler.
  * </pre>
- * <hr/>
+ * <hr></hr>
  * @author seung
  * @since 2020.12.21
  * @version 1.0.0
@@ -34,7 +34,7 @@ public class SText {
 	 * System.out.println(SText.pad(SText._PAD_LEFT, "1", 6, "0");
 	 * System.out.println(SText.pad(SText._PAD_RIGHT, "1", 6, "0");
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @param padPos - SText._PAD_LEFT: {@value SText#_PAD_LEFT}, SText._PAD_RIGHT: {@value SText#_PAD_RIGHT}
 	 * @param data
 	 * @param maxLength
@@ -75,7 +75,7 @@ public class SText {
 	 * <pre>
 	 * System.out.println(SText.toJavaCode("password".getBytes());
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -109,7 +109,7 @@ public class SText {
 	 * <pre>
 	 * SText.uuid("-", "");
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link SText#uuid(String, String)}
 	 * @author seung
 	 * @since 2020.12.21
@@ -128,7 +128,7 @@ public class SText {
 	 * String uuid = SText.uuid("-", "");
 	 * System.out.println(uuid);
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @param regex
 	 * @param replacement
 	 * @see {@link UUID#randomUUID()}

@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
  * {@value SCharset#_X_JOHAB}
  * {@value SCharset#_X_WINDOWS_949}
  * </pre>
- * <hr/>
+ * <hr></hr>
  * @author seung
  * @since 2020.12.21
  * @version 1.0.0
@@ -34,7 +34,7 @@ public class SCharset {
 	 * <pre>
 	 * ["ksc5601-1987","csEUCKR","ksc5601_1987","ksc5601","5601","euc_kr","ksc_5601","ks_c_5601-1987","euckr"]
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21
@@ -100,7 +100,7 @@ public class SCharset {
 	 * <pre>
 	 * ["csISO2022KR","ISO2022KR"]
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21
@@ -116,7 +116,7 @@ public class SCharset {
 	 * <pre>
 	 * ["819","ISO8859-1","l1","ISO_8859-1:1987","ISO_8859-1","8859_1","iso-ir-100","latin1","cp819","ISO8859_1","IBM819","ISO_8859_1","IBM-819","csISOLatin1"]
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21
@@ -155,7 +155,7 @@ public class SCharset {
 	 * <pre>
 	 * ["unicode-1-1-utf-8","UTF8"]
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21
@@ -230,7 +230,7 @@ public class SCharset {
 	 * <pre>
 	 * ["ms1361","ksc5601_1992","johab","ksc5601-1992"]
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21
@@ -272,7 +272,7 @@ public class SCharset {
 	 * <pre>
 	 * ["windows949","ms949","windows-949","ms_949"]
 	 * </pre>
-	 * <hr/>
+	 * <hr></hr>
 	 * @see {@link Charset#availableCharsets()}
 	 * @author seung
 	 * @since 2020.12.21
