@@ -43,19 +43,20 @@ public class SSecurity {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to digested data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
+	 * <pre>{@code
 	 * SLinkedHashMap data = new SLinkedHashMap()
 	 *   .add("key1", "value1")
 	 *   .add("key2", "value2")
 	 *   ;
 	 * String digested = SSecurity.digest(SAlgorithm._MD5, data);
 	 * System.out.println(digested);
-	 * <pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * SLinkedHashMap data = new SLinkedHashMap()
 	 *   .add("key1", "value1")
 	 *   .add("key2", "value2")
@@ -70,12 +71,12 @@ public class SSecurity {
 	 *   , true
 	 *   );
 	 * System.out.println(digested);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param data
-	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
-	 * @see {@link SSecurity#digest(String, String, int, byte[])}
+	 * @see SConvert#encodeHexString(byte[], boolean)
+	 * @see SSecurity#digest(String, String, int, byte[])
 	 * @author seung
 	 * @since 2021.01.06
 	 * @version 1.0.0
@@ -94,11 +95,11 @@ public class SSecurity {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to digested data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , "data".getBytes()
@@ -106,9 +107,9 @@ public class SSecurity {
 	 * for(byte b : digested) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , null
@@ -118,11 +119,11 @@ public class SSecurity {
 	 * for(byte b : digested) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param data
-	 * @see {@link SSecurity#digest(String, String, int, byte[])}
+	 * @see SSecurity#digest(String, String, int, byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -135,11 +136,11 @@ public class SSecurity {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to digested data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , 1
@@ -148,9 +149,9 @@ public class SSecurity {
 	 * for(byte b : digested) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] digested = SSecurity.digest(
 	 *   "SHA-256"
 	 *   , null
@@ -160,12 +161,12 @@ public class SSecurity {
 	 * for(byte b : digested) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
-	 * @param provider {@value BouncyCastleProvider#PROVIDER_NAME}
+	 * @param iteration
 	 * @param data
-	 * @see {@link SSecurity#digest(String, String, int, byte[])}
+	 * @see SSecurity#digest(String, String, int, byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -179,11 +180,11 @@ public class SSecurity {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to digested data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] digested = null;
 	 * // without provider
 	 * digested = SSecurity.digest(
@@ -206,7 +207,7 @@ public class SSecurity {
 	 * for(byte b : digested) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param algorithm {@value SAlgorithm#_MD5}, {@value SAlgorithm#_SHA256}, ...
 	 * @param provider {@value BouncyCastleProvider#PROVIDER_NAME}

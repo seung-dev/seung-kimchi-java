@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>Description</h1>
- * <pre>
+ * <pre>{@code
  * Text Data Type Handler.
- * </pre>
+ * }</pre>
  * <hr>
  * @author seung
  * @since 2020.12.21
@@ -26,14 +26,14 @@ public class SText {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Padding.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(SText.pad(SText._PAD_LEFT, "1", 6, "0");
 	 * System.out.println(SText.pad(SText._PAD_RIGHT, "1", 6, "0");
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param padPos - SText._PAD_LEFT: {@value SText#_PAD_LEFT}, SText._PAD_RIGHT: {@value SText#_PAD_RIGHT}
 	 * @param data
@@ -68,13 +68,13 @@ public class SText {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Generate java code.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(SText.toJavaCode("password".getBytes());
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @author seung
 	 * @since 2020.12.21
@@ -98,19 +98,19 @@ public class SText {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Generate UUID.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(SText.uuid());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * SText.uuid("-", "");
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link SText#uuid(String, String)}
+	 * @see SText#uuid(String, String)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -120,18 +120,18 @@ public class SText {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Generate UUID.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String uuid = SText.uuid("-", "");
 	 * System.out.println(uuid);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param regex
 	 * @param replacement
-	 * @see {@link UUID#randomUUID()}
+	 * @see UUID#randomUUID()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0

@@ -4,17 +4,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Security;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -30,7 +25,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import lombok.extern.slf4j.Slf4j;
-import seung.kimchi.java.utils.SAlgorithm;
 import seung.kimchi.java.utils.SCharset;
 import seung.kimchi.java.utils.SLinkedHashMap;
 
@@ -73,26 +67,26 @@ public class SConvert {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to json format text.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Map<String, String> map = new HashMap<>();
 	 * map.put("key1", "value1");
 	 * map.put("key2", "value2");
 	 * System.out.println(SConvert.stringify(map));
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Map<String, String> map = new HashMap<>();
 	 * map.put("key1", "value1");
 	 * map.put("key2", "value2");
 	 * System.out.println(SConvert.stringify(map, 0, "  "));
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @see {@link #stringify(Object, int, String)}
+	 * @see #stringify(Object, int, String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
@@ -102,29 +96,29 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to json format text.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Map<String, String> map = new HashMap<>();
 	 * map.put("key1", "value1");
 	 * map.put("key2", "value2");
 	 * System.out.println(SConvert.stringify(map, 0));
 	 * System.out.println(SConvert.stringify(map, 1));
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Map<String, String> map = new HashMap<>();
 	 * map.put("key1", "value1");
 	 * map.put("key2", "value2");
 	 * System.out.println(SConvert.stringify(map, 0, "  "));
 	 * System.out.println(SConvert.stringify(map, 1, "  "));
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
 	 * @param isPretty - 0: {@link Boolean#FALSE}, 1: {@link Boolean#TRUE}
-	 * @see {@link #stringify(Object, int, String)}
+	 * @see #stringify(Object, int, String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
@@ -134,29 +128,29 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to json format text.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Map<String, String> map = new HashMap<>();
 	 * map.put("key1", "value1");
 	 * map.put("key2", "value2");
 	 * System.out.println(SConvert.stringify(map, 1, "    "));
 	 * System.out.println(SConvert.stringify(map, 1, "\t"));
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
 	 * @param isPretty - 0: {@link Boolean#FALSE}, 1: {@link Boolean#TRUE}
 	 * @param indent - default: 2 spaces
-	 * @see {@link ObjectMapper#writeValueAsString(Object)}
-	 * @see {@link ObjectMapper#writerWithDefaultPrettyPrinter()}
-	 * @see {@link ObjectMapper#setDefaultPrettyPrinter(com.fasterxml.jackson.core.PrettyPrinter)}
-	 * @see {@link ObjectMapper#getSerializerProvider()}
-	 * @see {@link DefaultPrettyPrinter#indentObjectsWith(Indenter)}
-	 * @see {@link DefaultPrettyPrinter#indentArraysWith(Indenter)}
-	 * @see {@link DefaultIndenter#withIndent(String)}
-	 * @see {@link DefaultIndenter#withLinefeed(String)}
+	 * @see ObjectMapper#writeValueAsString(Object)
+	 * @see ObjectMapper#writerWithDefaultPrettyPrinter()
+	 * @see ObjectMapper#setDefaultPrettyPrinter(com.fasterxml.jackson.core.PrettyPrinter)
+	 * @see ObjectMapper#getSerializerProvider()
+	 * @see DefaultPrettyPrinter#indentObjectsWith(Indenter)
+	 * @see DefaultPrettyPrinter#indentArraysWith(Indenter)
+	 * @see DefaultIndenter#withIndent(String)
+	 * @see DefaultIndenter#withLinefeed(String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
@@ -197,27 +191,27 @@ public class SConvert {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to base64 decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String decoded = SConvert.decodeBase64String(
 	 *   "ZGF0YQ=="
 	 *   );
 	 * System.out.println(decoded);
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String decoded = SConvert.decodeBase64String(
 	 *   "ZGF0YQ=="
 	 *   , SCharset._UTF_8
 	 *   );
 	 * System.out.println(decoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @see {@link SConvert#decodeBase64String(byte[], String)}
+	 * @see SConvert#decodeBase64String(byte[], String)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -233,21 +227,21 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to base64 decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String decoded = SConvert.decodeBase64String(
 	 *   "ZGF0YQ==".getBytes()
 	 *   , SCharset._UTF_8
 	 *   );
 	 * System.out.println(decoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param encoded
 	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
-	 * @see {@link SConvert#decodeBase64String(byte[], String)}
+	 * @see SConvert#decodeBase64String(byte[], String)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -263,21 +257,21 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to base64 decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] decoded = SConvert.decodeBase64(
 	 *   "ZGF0YQ==".getBytes()
 	 *   );
 	 * for(byte b : decoded) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @see {@link Base64#decodeBase64(byte[])}
+	 * @see Base64#decodeBase64(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -288,21 +282,21 @@ public class SConvert {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to base64 encoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String encoded = SConvert.encodeBase64String(
 	 *   "data".getBytes()
 	 *   , SCharset._UTF_8
 	 *   );
 	 * System.out.println(encoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
 	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
-	 * @see {@link SConvert#encodeBase64(byte[])}
+	 * @see SConvert#encodeBase64(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -318,21 +312,21 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to base64 decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] encoded = SConvert.encodeBase64(
 	 *   "data".getBytes()
 	 *   );
 	 * for(byte b : encoded) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @see {@link Base64#encodeBase64(byte[])}
+	 * @see Base64#encodeBase64(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -343,27 +337,27 @@ public class SConvert {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to hex decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String decoded = SConvert.decodeHexString(
 	 *   "64617461"
 	 *   );
 	 * System.out.println(decoded);
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String decoded = SConvert.decodeHexString(
 	 *   "64617461"
 	 *   , SCharset._UTF_8
 	 *   );
 	 * System.out.println(decoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @see {@link SConvert#decodeHexString(String, String)}
+	 * @see SConvert#decodeHexString(String, String)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -373,22 +367,22 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to hex decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String decoded = SConvert.decodeHexString(
 	 *   "64617461"
 	 *   , SCharset._UTF_8
 	 *   );
 	 * System.out.println(decoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @param data
+	 * @param encoded
 	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
-	 * @see {@link SConvert#decodeHex(String)}
-	 * @see {@link SCharset}
+	 * @see SConvert#decodeHex(String)
+	 * @see SCharset}
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -404,21 +398,21 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to hex decoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * byte[] decoded = SConvert.decodeHexString(
 	 *   "64617461"
 	 *   );
 	 * for(byte b : decoded) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @see {@link Hex#decodeHex(String)}
+	 * @see Hex#decodeHex(String)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -435,21 +429,21 @@ public class SConvert {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to hex encoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String encoded = SConvert.encodeHexString(
 	 *   new BigInteger("1234567890")
 	 *   , true
 	 *   );
 	 * System.out.println(encoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
 	 * @param toLowerCase
-	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
+	 * @see SConvert#encodeHexString(byte[], boolean)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -459,26 +453,26 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to hex encoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String encoded = SConvert.encodeHexString(
 	 *   "data"
 	 *   );
 	 * System.out.println(encoded);
-	 * </pre>
+	 * }</pre>
 	 * <h1>Equal</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * SConvert.encodeHexString(
 	 *   "data"
 	 *   , true
 	 *   );
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @see {@link SConvert#encodeHexString(byte[], boolean)}
+	 * @see SConvert#encodeHexString(byte[], boolean)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -494,21 +488,21 @@ public class SConvert {
 	}
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Convert to hex encoded data.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * String encoded = SConvert.encodeHexString(
 	 *   "data".getBytes()
 	 *   , true
 	 *   );
 	 * System.out.println(encoded);
-	 * </pre>
+	 * }</pre>
 	 * <hr>
 	 * @param data
 	 * @param toLowerCase
-	 * @see {@link Base64#encodeBase64(byte[])}
+	 * @see Base64#encodeBase64(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -519,17 +513,17 @@ public class SConvert {
 	
 	/**
 	 * <h1>Description</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * Available Charset.
-	 * </pre>
+	 * }</pre>
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * for(String charset : SConvert.availableCharset()) {
 	 *   System.out.println(charset);
 	 * }
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0

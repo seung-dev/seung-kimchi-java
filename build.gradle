@@ -62,4 +62,5 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Jar) {
 	destinationDir = file("../../build/java")
+	archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
 }

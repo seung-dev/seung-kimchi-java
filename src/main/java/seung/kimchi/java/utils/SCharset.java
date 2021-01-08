@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 
 /**
  * <h1>Description</h1>
- * <pre>
+ * <pre>{@code
  * Korean charsets.
  * 
  * {@value SCharset#_EUC_KR}
@@ -13,7 +13,7 @@ import java.nio.charset.Charset;
  * {@value SCharset#_UTF_8}
  * {@value SCharset#_X_JOHAB}
  * {@value SCharset#_X_WINDOWS_949}
- * </pre>
+ * }</pre>
  * <hr>
  * @author seung
  * @since 2020.12.21
@@ -27,15 +27,15 @@ public class SCharset {
 //	public static final String _EUC_JP = "EUC-JP";
 	/**
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(Charset.forName(SCharset._EUC_KR).aliases());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Aliase</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * ["ksc5601-1987","csEUCKR","ksc5601_1987","ksc5601","5601","euc_kr","ksc_5601","ks_c_5601-1987","euckr"]
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -93,15 +93,15 @@ public class SCharset {
 //	public static final String _ISO_2022_JP_2 = "ISO-2022-JP-2";
 	/**
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(Charset.forName(SCharset._ISO_2022_KR).aliases());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Aliase</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * ["csISO2022KR","ISO2022KR"]
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -109,15 +109,15 @@ public class SCharset {
 	public static final String _ISO_2022_KR = "ISO-2022-KR";
 	/**
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(Charset.forName(SCharset._ISO_8859_1).aliases());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Aliase</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * ["819","ISO8859-1","l1","ISO_8859-1:1987","ISO_8859-1","8859_1","iso-ir-100","latin1","cp819","ISO8859_1","IBM819","ISO_8859_1","IBM-819","csISOLatin1"]
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -148,15 +148,15 @@ public class SCharset {
 	public static final String _UTF_32LE = "UTF-32LE";
 	/**
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(Charset.forName(SCharset._UTF_8).aliases());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Aliase</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * ["unicode-1-1-utf-8","UTF8"]
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -223,15 +223,15 @@ public class SCharset {
 //	public static final String _X_JISAUTODETECT = "x-JISAutoDetect";
 	/**
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(Charset.forName(SCharset._X_JOHAB).aliases());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Aliase</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * ["ms1361","ksc5601_1992","johab","ksc5601-1992"]
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
@@ -265,15 +265,15 @@ public class SCharset {
 //	public static final String _X_WINDOWS_874 = "x-windows-874";
 	/**
 	 * <h1>Usage</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * System.out.println(Charset.forName(SCharset._X_WINDOWS_949).aliases());
-	 * </pre>
+	 * }</pre>
 	 * <h1>Aliase</h1>
-	 * <pre>
+	 * <pre>{@code
 	 * ["windows949","ms949","windows-949","ms_949"]
-	 * </pre>
+	 * }</pre>
 	 * <hr>
-	 * @see {@link Charset#availableCharsets()}
+	 * @see Charset#availableCharsets()
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
