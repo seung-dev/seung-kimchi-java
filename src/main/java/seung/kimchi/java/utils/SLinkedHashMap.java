@@ -267,6 +267,14 @@ public class SLinkedHashMap extends LinkedHashMap {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<SLinkedHashMap> getListSLinkedHashMap(Object key) {
+		if(!isNull(key)) {
+			return (List<SLinkedHashMap>) get(key);
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public String[] getArrayString(Object key) {
 		if(isEmpty(key)) {
 			return null;
