@@ -1,6 +1,6 @@
 package seung.kimchi.java;
 
-import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
@@ -11,15 +11,35 @@ import seung.kimchi.java.utils.SLinkedHashMap;
 @Slf4j
 public class SHttp {
 
+	public static String ip4v(String url) throws InterruptedException, UnsupportedEncodingException {
+		
+		String ip4v = "";
+		
+		HttpResponse<byte[]> httpResponse = request(
+				Unirest
+					.get(url)
+					.connectTimeout(1000 * 3)
+					.socketTimeout(1000 * 3)
+				, 3
+				, 1000
+				);
+		
+		if(200 == httpResponse.getStatus() && httpResponse.getBody() != null) {
+			ip4v = new String(httpResponse.getBody(), "UTF-8");
+		}
+		
+		return ip4v;
+	}
+	
 	public static String ip4v() throws InterruptedException {
 		
 		String ip4v = "";
 		
 		HttpResponse<byte[]> httpResponse = request(
 				Unirest
-					.get("https://api.ip.pe.kr/json/")
-					.connectTimeout(1000 * 3)
-					.socketTimeout(1000 * 3)
+				.get("https://api.ip.pe.kr/json/")
+				.connectTimeout(1000 * 3)
+				.socketTimeout(1000 * 3)
 				, 3
 				, 1000
 				);

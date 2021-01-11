@@ -1,7 +1,5 @@
 package seung.kimchi.java.utils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
@@ -56,7 +54,7 @@ public class SResponse {
 	private SLinkedHashMap response = new SLinkedHashMap();
 	
 	@SuppressWarnings("unchecked")
-	public void putResult(Object key, Object value) {
+	public void putResponse(Object key, Object value) {
 		this.response.put(key, value);
 	}
 	
@@ -82,7 +80,7 @@ public class SResponse {
 	}
 	
 	public void done() {
-		this.request_time = new Date().getTime();
+		this.response_time = new Date().getTime();
 		this.elapsed_time = response_time - request_time;
 	}
 	

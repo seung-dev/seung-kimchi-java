@@ -14,7 +14,7 @@ import lombok.Setter;
 @Builder
 @Setter
 @Getter
-public class SRequest {
+public class SRequestHeader {
 
 	public String stringify(boolean isPretty) throws JsonProcessingException {
 		return new ObjectMapper()

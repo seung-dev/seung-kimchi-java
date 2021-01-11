@@ -10,10 +10,10 @@ import lombok.Setter;
 public class SRequestBody {
 
 	@NotBlank(message = "요청코드(requestCode)는 필수항목 입니다.")
-	private String requestCode;
+	private String request_code;
 	
-	private SRequest sRequest;
+	private SRequestHeader header;
 	
-	private SLinkedHashMap data;
+	private Object body;
 	
 }

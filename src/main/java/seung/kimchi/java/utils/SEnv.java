@@ -24,6 +24,12 @@ public class SEnv {
 				;
 	}
 	
+	@Builder.Default
+	private boolean isShutdown = false;
+	
+	@Builder.Default
+	private String shutdownMessage = "";
+	
 	// server
 	private int serverNo;
 	
