@@ -14,6 +14,6 @@ public class SRequestBody {
 	
 	private SRequestHeader header;
 	
-	private Object body;
+	private SLinkedHashMap data;
 	
 }
