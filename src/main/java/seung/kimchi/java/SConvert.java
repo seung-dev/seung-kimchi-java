@@ -1,6 +1,8 @@
 package seung.kimchi.java;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -33,6 +35,12 @@ public class SConvert {
 
 	public SConvert() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public static String toString(Exception exception) {
+		StringWriter stringWriter = new StringWriter();
+		exception.printStackTrace(new PrintWriter(stringWriter));
+		return stringWriter.toString();
 	}
 	
 	public static SLinkedHashMap toSLinkedHashMap(String data) {

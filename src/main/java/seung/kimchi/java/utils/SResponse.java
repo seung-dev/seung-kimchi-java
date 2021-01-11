@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import seung.kimchi.java.SConvert;
 
 @Builder
 @Getter
@@ -68,9 +69,7 @@ public class SResponse {
 	}
 	
 	public void error(Exception exception) {
-		StringWriter stringWriter = new StringWriter();
-		exception.printStackTrace(new PrintWriter(stringWriter));
-		error(stringWriter.toString());
+		error(SConvert.toString(exception));
 	}
 	
 	public void error(String error_message) {
