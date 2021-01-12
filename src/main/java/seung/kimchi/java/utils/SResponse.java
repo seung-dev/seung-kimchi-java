@@ -33,7 +33,7 @@ public class SResponse {
 	private String request_code;
 	
 	@Builder.Default
-	private long request_time = new Date().getTime();
+	private long request_time = -1l;
 	
 	@Builder.Default
 	private long response_time = -1l;

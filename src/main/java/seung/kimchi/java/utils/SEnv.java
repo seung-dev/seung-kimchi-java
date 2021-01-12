@@ -25,7 +25,7 @@ public class SEnv {
 	}
 	
 	@Builder.Default
-	private boolean isShutdown = false;
+	private boolean shutdown = false;
 	
 	@Builder.Default
 	private String shutdownMessage = "";
@@ -54,6 +54,10 @@ public class SEnv {
 	
 	private String projName;
 	
+	private String projVer;
+	
+	private String projTime;
+	
 	private int serverPort;
 	
 	private String profilesActive;
@@ -69,5 +73,10 @@ public class SEnv {
 	
 	@Builder.Default
 	private boolean batchEnabled = false;
+	
+	public void shutdown(boolean shutdown, String shutdownMessage) {
+		this.shutdown = shutdown;
+		this.shutdownMessage = shutdownMessage;
+	}
 	
 }

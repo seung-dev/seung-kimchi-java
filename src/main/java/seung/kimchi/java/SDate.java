@@ -26,6 +26,9 @@ public class SDate {
 	public static String getDateString() {
 		return getDateString("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", new Date(), TimeZone.getDefault());
 	}
+	public static String getDateString(Date date) {
+		return getDateString("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", date, TimeZone.getDefault());
+	}
 	public static String getDateString(String pattern) {
 		return getDateString(pattern, new Date());
 	}

@@ -32,6 +32,9 @@ public class SProperties {
 	private Properties environment = new Properties();
 	
 	@Builder.Default
+	private Properties build = new Properties();
+	
+	@Builder.Default
 	private List<Properties> datasource = new ArrayList<>();
 	
 	@Builder.Default

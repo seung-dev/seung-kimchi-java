@@ -30,30 +30,31 @@ public class SRequestHeader {
 	private long request_time = new Date().getTime();
 	
 	@Builder.Default
-	private SLinkedHashMap network = new SLinkedHashMap();
-	
-	@Builder.Default
-	private SLinkedHashMap header = new SLinkedHashMap();
+	private SLinkedHashMap fields = new SLinkedHashMap();
 	
 	@Builder.Default
 	private SLinkedHashMap session = new SLinkedHashMap();
 	
-	@Builder.Default
-	private SLinkedHashMap data = new SLinkedHashMap();
-	
 	@SuppressWarnings("unchecked")
-	public void network(Object key, Object value) {
-		this.network.put(key, value);
+	public void put(String key, Object value) {
+		this.fields.put(key, value);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void header(Object key, Object value) {
-		this.header.put(key, value);
+	public String get(String key) {
+		return this.fields.getString(key, "");
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void session(Object key, Object value) {
-		this.network.put(key, value);
+		this.session.put(key, value);
+	}
+	
+	public Object session(Object key) {
+		return this.session.get(key);
+	}
+	
+	public String sessionString(Object key) {
+		return this.session.getString(key, "");
 	}
 	
 }
