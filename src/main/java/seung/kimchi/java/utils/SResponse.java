@@ -1,6 +1,7 @@
 package seung.kimchi.java.utils;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 
@@ -52,6 +53,11 @@ public class SResponse {
 	
 	@Builder.Default
 	private SLinkedHashMap response = new SLinkedHashMap();
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void putResponse(Map map) {
+		this.response.putAll(map);
+	}
 	
 	@SuppressWarnings("unchecked")
 	public void putResponse(Object key, Object value) {

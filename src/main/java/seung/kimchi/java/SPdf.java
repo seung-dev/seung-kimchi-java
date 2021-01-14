@@ -24,7 +24,7 @@ public class SPdf {
 			) {
 		byte[] pdf = null;
 		try {
-			pdf = encrypt(FileUtils.readFileToByteArray(file), key, true, true, true, true);
+			pdf = encrypt(FileUtils.readFileToByteArray(file), key, false, false, false, true);
 		} catch (IOException e) {
 			log.error("Failed to encrypt pdf file.", e);
 		}
@@ -34,7 +34,7 @@ public class SPdf {
 			byte[] data
 			, String key
 			) {
-		return encrypt(data, key, true, true, true, true);
+		return encrypt(data, key, false, false, false, true);
 	}
 	public static byte[] encrypt(
 			byte[] data
@@ -59,6 +59,13 @@ public class SPdf {
 			if(readOnly) {
 				accessPermission.setReadOnly();
 			}
+			/*
+			accessPermission.setCanAssembleDocument(false);
+			accessPermission.setCanExtractForAccessibility(false);
+			accessPermission.setCanFillInForm(false);
+			accessPermission.setCanModifyAnnotations(false);
+			accessPermission.setCanPrintDegraded(false);
+			*/
 			
 			StandardProtectionPolicy policy = new StandardProtectionPolicy(
 					key
