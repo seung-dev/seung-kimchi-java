@@ -1,13 +1,24 @@
 package seung.kimchi.java;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Provider;
 import java.security.Security;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -39,6 +50,71 @@ public class SSecurity {
 	
 	public SSecurity() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public static byte[] encrypt(
+			byte[] data
+			, String transformation
+			, String provider
+			, byte[] key
+			, String algorithm
+			, byte[] iv
+			) {
+		return encrypt(data, transformation, provider, generateSecretKeySpec(key, algorithm), generateIvParameterSpec(iv));
+	}
+	public static byte[] encrypt(
+			byte[] data
+			, String transformation
+			, String provider
+			, Key key
+			, AlgorithmParameterSpec algorithmParameterSpec
+			) {
+		
+		byte[] encrypted = null;
+		
+		Cipher cipher = null;
+		try {
+			
+			if(provider != null && !"".equals(provider)) {
+				cipher = Cipher.getInstance(transformation, provider);
+			} else {
+				cipher = Cipher.getInstance(transformation);
+			}
+			
+			cipher.init(Cipher.ENCRYPT_MODE, key, algorithmParameterSpec);
+			
+			encrypted = cipher.doFinal(data);
+			
+		} catch (NoSuchAlgorithmException e) {
+			log.error("Failed to encrypt data.", e);
+		} catch (NoSuchProviderException e) {
+			log.error("Failed to encrypt data.", e);
+		} catch (NoSuchPaddingException e) {
+			log.error("Failed to encrypt data.", e);
+		} catch (InvalidKeyException e) {
+			log.error("Failed to encrypt data.", e);
+		} catch (InvalidAlgorithmParameterException e) {
+			log.error("Failed to encrypt data.", e);
+		} catch (IllegalBlockSizeException e) {
+			log.error("Failed to encrypt data.", e);
+		} catch (BadPaddingException e) {
+			log.error("Failed to encrypt data.", e);
+		}
+		
+		return encrypted;
+	}
+	
+	public static AlgorithmParameterSpec generateIvParameterSpec(
+			byte[] iv
+			) {
+		return new IvParameterSpec(iv);
+	}
+	
+	public static Key generateSecretKeySpec(
+			byte[] key
+			, String algorithm
+			) {
+		return new SecretKeySpec(key, algorithm);
 	}
 	
 	/**
@@ -226,10 +302,10 @@ public class SSecurity {
 		byte[] digest = data.clone();
 		MessageDigest messageDigest;
 		try {
-			if(provider == null || "".equals(provider)) {
-				messageDigest = MessageDigest.getInstance(algorithm);
-			} else {
+			if(provider != null && !"".equals(provider)) {
 				messageDigest = MessageDigest.getInstance(algorithm, provider);
+			} else {
+				messageDigest = MessageDigest.getInstance(algorithm);
 			}
 			for(int i = 0; i < iteration; i++) {
 				messageDigest.update(digest);
