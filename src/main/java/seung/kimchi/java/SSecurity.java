@@ -52,6 +52,48 @@ public class SSecurity {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public static byte[] decrypt(
+			byte[] encrypted
+			, String transformation
+			, String provider
+			, Key key
+			, AlgorithmParameterSpec algorithmParameterSpec
+			) {
+		
+		byte[] decrypted = null;
+		
+		Cipher cipher = null;
+		try {
+			
+			if(provider != null && !"".equals(provider)) {
+				cipher = Cipher.getInstance(transformation, provider);
+			} else {
+				cipher = Cipher.getInstance(transformation);
+			}
+			
+			cipher.init(Cipher.DECRYPT_MODE, key, algorithmParameterSpec);
+			
+			decrypted = cipher.doFinal(encrypted);
+			
+		} catch (NoSuchAlgorithmException e) {
+			log.error("Failed to decrypt data.", e);
+		} catch (NoSuchProviderException e) {
+			log.error("Failed to decrypt data.", e);
+		} catch (NoSuchPaddingException e) {
+			log.error("Failed to decrypt data.", e);
+		} catch (InvalidKeyException e) {
+			log.error("Failed to decrypt data.", e);
+		} catch (InvalidAlgorithmParameterException e) {
+			log.error("Failed to decrypt data.", e);
+		} catch (IllegalBlockSizeException e) {
+			log.error("Failed to decrypt data.", e);
+		} catch (BadPaddingException e) {
+			log.error("Failed to decrypt data.", e);
+		}
+		
+		return decrypted;
+	}
+	
 	public static byte[] encrypt(
 			byte[] data
 			, String transformation
@@ -110,7 +152,7 @@ public class SSecurity {
 		return new IvParameterSpec(iv);
 	}
 	
-	public static Key generateSecretKeySpec(
+	public static SecretKeySpec generateSecretKeySpec(
 			byte[] key
 			, String algorithm
 			) {

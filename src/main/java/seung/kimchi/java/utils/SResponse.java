@@ -85,6 +85,10 @@ public class SResponse {
 		this.error_message = error_message;
 	}
 	
+	public boolean hasError() {
+		return !"S000".equals(error_code);
+	}
+	
 	public void done() {
 		this.response_time = new Date().getTime();
 		this.elapsed_time = response_time - request_time;
