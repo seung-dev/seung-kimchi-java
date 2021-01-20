@@ -72,6 +72,10 @@ public class SResponse {
 		this.error_code = error_code;
 	}
 	
+	public void error(String format, Object args) {
+		error(String.format(format, args));
+	}
+	
 	public void error(Exception exception) {
 		error(SConvert.toString(exception));
 	}

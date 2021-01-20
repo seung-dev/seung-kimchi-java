@@ -31,7 +31,8 @@ public class SEnv {
 	private String shutdownMessage = "";
 	
 	// server
-	private int serverNo;
+	@Builder.Default
+	private int serverNo = -1;
 	
 	@Builder.Default
 	private boolean isWindows = false;
@@ -50,7 +51,8 @@ public class SEnv {
 	private String osVer;
 	
 	// app
-	private int appNo;
+	@Builder.Default
+	private int appNo = -1;
 	
 	private String projName;
 	
