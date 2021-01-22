@@ -56,6 +56,16 @@ public class SSecurity {
 			byte[] encrypted
 			, String transformation
 			, String provider
+			, byte[] key
+			, String algorithm
+			, byte[] iv
+			) {
+		return decrypt(encrypted, transformation, provider, generateSecretKeySpec(key, algorithm), generateIvParameterSpec(iv));
+	}
+	public static byte[] decrypt(
+			byte[] encrypted
+			, String transformation
+			, String provider
 			, Key key
 			, AlgorithmParameterSpec algorithmParameterSpec
 			) {

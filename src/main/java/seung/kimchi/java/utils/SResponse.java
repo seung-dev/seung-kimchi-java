@@ -20,14 +20,20 @@ import seung.kimchi.java.SConvert;
 @Setter
 public class SResponse {
 
-	public String stringify(boolean isPretty) throws JsonProcessingException {
-		return new ObjectMapper()
-				.setSerializationInclusion(Include.ALWAYS)
-				.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-				.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true)
-				.configure(SerializationFeature.INDENT_OUTPUT, isPretty)
-				.writeValueAsString(this)
-				;
+	public String stringify(boolean isPretty) {
+		String stringify = "";
+		try {
+			stringify = new ObjectMapper()
+					.setSerializationInclusion(Include.ALWAYS)
+					.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+					.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true)
+					.configure(SerializationFeature.INDENT_OUTPUT, isPretty)
+					.writeValueAsString(this)
+					;
+		} catch (JsonProcessingException e) {
+			stringify = "Failed to convert to json format text.";
+		}
+		return stringify;
 	}
 	
 	@NotBlank
@@ -56,7 +62,9 @@ public class SResponse {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void putResponse(Map map) {
-		this.response.putAll(map);
+		if(map != null) {
+			this.response.putAll(map);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -72,7 +80,7 @@ public class SResponse {
 		this.error_code = error_code;
 	}
 	
-	public void error(String format, Object args) {
+	public void error(String format, Object... args) {
 		error(String.format(format, args));
 	}
 	

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
@@ -38,9 +39,10 @@ public class SConvert {
 	}
 	
 	public static String toString(Exception exception) {
-		StringWriter stringWriter = new StringWriter();
-		exception.printStackTrace(new PrintWriter(stringWriter));
-		return stringWriter.toString();
+		return exception.getMessage();
+//		StringWriter stringWriter = new StringWriter();
+//		exception.printStackTrace(new PrintWriter(stringWriter));
+//		return stringWriter.toString();
 	}
 	
 	public static SLinkedHashMap toSLinkedHashMap(String data) {
@@ -517,6 +519,24 @@ public class SConvert {
 	 */
 	public static String encodeHexString(byte[] data, boolean toLowerCase) {
 		return Hex.encodeHexString(data, toLowerCase);
+	}
+	
+	public static String encodeURIComponent(String data, String charset) {
+		String encoded = "";
+		try {
+			encoded = URLEncoder
+					.encode(data, charset)
+					.replaceAll("\\+", "%20")
+					.replaceAll("\\%21", "!")
+					.replaceAll("\\%27", "'")
+					.replaceAll("\\%28", "(")
+					.replaceAll("\\%29", ")")
+					.replaceAll("\\%7E", "~")
+					;
+		} catch (UnsupportedEncodingException e) {
+			log.error("Failed to convert to url encoded text.", e);
+		}
+		return encoded;
 	}
 	
 	/**
