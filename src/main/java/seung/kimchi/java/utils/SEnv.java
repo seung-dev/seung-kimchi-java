@@ -28,57 +28,57 @@ public class SEnv {
 	private boolean shutdown = false;
 	
 	@Builder.Default
-	private String shutdownMessage = "";
+	private String shutdown_message = "";
 	
 	// server
 	@Builder.Default
-	private int serverNo = -1;
+	private int server_no = -1;
 	
 	@Builder.Default
-	private boolean isWindows = false;
+	private boolean is_windows = false;
 	
 	@Builder.Default
-	private boolean isLinux = false;
+	private boolean is_linux = false;
 	
-	private String hostName;
+	private String host_name;
 	
 	private String ip4v;
 	
 	private String domain;
 	
-	private String osName;
+	private String os_name;
 	
-	private String osVer;
+	private String os_ver;
 	
 	// app
 	@Builder.Default
-	private int appNo = -1;
+	private int app_no = -1;
 	
-	private String projName;
+	private String app_name;
 	
-	private String projVer;
+	private String app_ver;
 	
-	private String projTime;
+	private String build_time;
 	
-	private int serverPort;
+	private int server_port;
 	
-	private String profilesActive;
-	
-	@Builder.Default
-	private boolean isOps = false;
+	private String app_mode;
 	
 	@Builder.Default
-	private boolean isDev = false;
+	private boolean is_ops = false;
 	
 	@Builder.Default
-	private boolean isLoc = false;
+	private boolean is_dev = false;
 	
 	@Builder.Default
-	private boolean batchEnabled = false;
+	private boolean is_loc = false;
 	
-	public void shutdown(boolean shutdown, String shutdownMessage) {
+	@Builder.Default
+	private boolean batch_enabled = false;
+	
+	public void shutdown(boolean shutdown, String shutdown_message) {
 		this.shutdown = shutdown;
-		this.shutdownMessage = shutdownMessage;
+		this.shutdown_message = shutdown_message;
 	}
 	
 }

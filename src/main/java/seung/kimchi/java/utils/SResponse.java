@@ -61,14 +61,14 @@ public class SResponse {
 	private SLinkedHashMap response = new SLinkedHashMap();
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void putResponse(Map map) {
+	public void add(Map map) {
 		if(map != null) {
 			this.response.putAll(map);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void putResponse(Object key, Object value) {
+	public void put(Object key, Object value) {
 		this.response.put(key, value);
 	}
 	
