@@ -13,11 +13,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import seung.kimchi.java.SConvert;
 
 @Builder
 @Getter
 @Setter
+@Slf4j
 public class SResponse {
 
 	public String stringify(boolean isPretty) {
@@ -31,7 +33,7 @@ public class SResponse {
 					.writeValueAsString(this)
 					;
 		} catch (JsonProcessingException e) {
-			stringify = "Failed to convert to json format text.";
+			log.error("Failed to convert to json format text.", e);
 		}
 		return stringify;
 	}
@@ -72,6 +74,14 @@ public class SResponse {
 		this.response.put(key, value);
 	}
 	
+	public String getString(Object key, String defaultValue) {
+		return this.response.getString(key, defaultValue);
+	}
+	
+	public int getInt(Object key, int defaultValue) {
+		return this.response.getInt(key, defaultValue);
+	}
+	
 	public void success() {
 		success("S000");
 	}
@@ -93,7 +103,7 @@ public class SResponse {
 	}
 	
 	public void exception(Exception exception) {
-		error_message(SConvert.toString(exception));
+		error_message(SConvert.exception(exception));
 	}
 	
 	public void error(String error_code, String error_message) {

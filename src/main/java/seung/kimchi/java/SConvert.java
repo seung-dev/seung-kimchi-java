@@ -1,12 +1,18 @@
 package seung.kimchi.java;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
@@ -36,11 +42,11 @@ public class SConvert {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static String toString(Exception exception) {
-		return exception.getMessage();
-//		StringWriter stringWriter = new StringWriter();
-//		exception.printStackTrace(new PrintWriter(stringWriter));
-//		return stringWriter.toString();
+	public static String exception(Exception exception) {
+//		return exception.getMessage();
+		StringWriter stringWriter = new StringWriter();
+		exception.printStackTrace(new PrintWriter(stringWriter));
+		return stringWriter.toString();
 	}
 	
 	public static SLinkedHashMap toSLinkedHashMap(String data) {
@@ -195,6 +201,73 @@ public class SConvert {
 			log.error("Failed to convert to json format text.", e);
 		}
 		return json;
+	}
+	
+	public static byte[] decompress(byte[] data) {
+		return decompress(data, true);
+	}
+	public static byte[] decompress(byte[] data, boolean nowrap) {
+		
+		byte[] inflated = null;
+		
+		Inflater inflater = new Inflater(nowrap);
+		
+		inflater.setInput(data);
+		
+		byte[] b = new byte[1024];
+		int len;
+		try (
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				) {
+			
+			while(!inflater.finished()) {
+				len = inflater.inflate(b);
+				byteArrayOutputStream.write(b, 0, len);
+			}
+			
+			inflated = byteArrayOutputStream.toByteArray();
+			inflater.end();
+			
+		} catch (IOException e) {
+			log.error("Failed to decompress data.", e);
+		} catch (DataFormatException e) {
+			log.error("Failed to decompress data.", e);
+		}
+		
+		return inflated;
+	}
+	
+	public static byte[] compress(byte[] data) {
+		return compress(data, Deflater.BEST_COMPRESSION, true);
+	}
+	public static byte[] compress(byte[] data, int level, boolean nowrap) {
+		
+		byte[] deflated = null;
+		
+		Deflater deflater = new Deflater(level, nowrap);
+		
+		deflater.setInput(data);
+		deflater.finish();
+		
+		byte[] b = new byte[1024];
+		int len;
+		try (
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				) {
+			
+			while(!deflater.finished()) {
+				len = deflater.deflate(b);
+				byteArrayOutputStream.write(b, 0, len);
+			}
+			
+			deflated = byteArrayOutputStream.toByteArray();
+			deflater.end();
+			
+		} catch (IOException e) {
+			log.error("Failed to compress data.", e);
+		}
+		
+		return deflated;
 	}
 	
 	/**

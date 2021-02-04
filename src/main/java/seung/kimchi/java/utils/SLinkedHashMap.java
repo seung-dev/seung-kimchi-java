@@ -76,7 +76,7 @@ public class SLinkedHashMap extends LinkedHashMap {
 		return getString(key, null);
 	}
 	public String getString(Object key, String defaultValue) {
-		if(isEmpty(key)) {
+		if(isNull(key)) {
 			return defaultValue;
 		}
 		Object value = get(key);
