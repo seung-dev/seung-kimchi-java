@@ -24,6 +24,10 @@ public class SText {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public static int random(int min, int max) {
+		return (int) ((Math.random() * (max - min)) + min);
+	}
+	
 	/**
 	 * <h1>Description</h1>
 	 * <pre>{@code
