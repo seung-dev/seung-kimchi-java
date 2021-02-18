@@ -8,7 +8,6 @@ bin/
 
 ### Gradle ###
 .gradle
-gradle/
 
 ### STS ###
 .apt_generated
