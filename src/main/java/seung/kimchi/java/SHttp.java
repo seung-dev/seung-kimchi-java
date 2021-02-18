@@ -19,7 +19,7 @@ public class SHttp {
 				Unirest
 					.get(url)
 					.connectTimeout(1000 * 3)
-					.socketTimeout(1000 * 3)
+					.socketTimeout(1000 * 60)
 				, 3
 				, 1000
 				);
@@ -39,7 +39,7 @@ public class SHttp {
 				Unirest
 				.get("https://api.ip.pe.kr/json/")
 				.connectTimeout(1000 * 3)
-				.socketTimeout(1000 * 3)
+				.socketTimeout(1000 * 60)
 				, 3
 				, 1000
 				);

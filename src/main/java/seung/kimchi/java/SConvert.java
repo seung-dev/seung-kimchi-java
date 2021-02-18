@@ -100,7 +100,6 @@ public class SConvert {
 	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @see #stringify(Object, int, String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
@@ -132,7 +131,6 @@ public class SConvert {
 	 * <hr>
 	 * @param data
 	 * @param isPretty - {@link Boolean#FALSE}, {@link Boolean#TRUE}
-	 * @see #stringify(Object, int, String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
