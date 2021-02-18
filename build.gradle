@@ -2,15 +2,14 @@ plugins {
 	id "java-library"
 }
 
+group = "seung.java"
 version = "1.0.0"
-group = "seung.kimchi"
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
-	withJavadocJar()
 }
 
 repositories {
@@ -58,6 +57,44 @@ dependencies {
 	api("org.bouncycastle:bcprov-jdk15on:1.67")
 	api("org.bouncycastle:bcpkix-jdk15on:1.67")
 }
+
+/*
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+tasks.withType(Jar) {
+	destinationDir = file("../../build/java")
+	archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+*/
+
+// jitpack
+/*
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	archives javadocJar
+}
+
+// To specify a license in the pom:
+install {
+	repositories.mavenInstaller {
+		pom.project {
+			licenses {
+				license {
+					name 'The Apache Software License, Version 2.0'
+					url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					distribution 'repo'
+				}
+			}
+		}
+	}
+}
+*/
 
 /* include dependencies
 configurations {
@@ -114,12 +151,3 @@ dependencies {
 	configurations.compile.extendsFrom(configurations.inc)
 }
 */
-
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-}
-
-tasks.withType(Jar) {
-	destinationDir = file("../../build/java")
-	archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
-}
