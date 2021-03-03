@@ -38,46 +38,35 @@ public class SEnv {
 	@Builder.Default
 	private String shutdown_message = "";
 	
-	// server
-	@Builder.Default
-	private int server_no = -1;
-	
+	// os
+	private String os_name;
+	private String os_ver;
 	@Builder.Default
 	private boolean is_windows = false;
-	
 	@Builder.Default
 	private boolean is_linux = false;
 	
+	// server
+	@Builder.Default
+	private int server_no = -1;
 	private String host_name;
-	
 	private String ip4v;
-	
-	private String domain;
-	
-	private String os_name;
-	
-	private String os_ver;
+	private String host;
+	private int server_port;
+	private int server_desc;
 	
 	// app
 	@Builder.Default
 	private int app_no = -1;
-	
 	private String app_name;
-	
 	private String app_ver;
-	
 	private String build_time;
-	
-	private int server_port;
-	
+	private String app_path;
 	private String app_mode;
-	
 	@Builder.Default
 	private boolean is_ops = false;
-	
 	@Builder.Default
 	private boolean is_dev = false;
-	
 	@Builder.Default
 	private boolean is_loc = false;
 	

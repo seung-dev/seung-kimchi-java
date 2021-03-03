@@ -2,8 +2,6 @@ package seung.kimchi.java;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -11,13 +9,9 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.NumberToTextConverter;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import lombok.extern.slf4j.Slf4j;
-import seung.kimchi.java.utils.SLinkedHashMap;
 import seung.kimchi.java.utils.excel.SCell;
 import seung.kimchi.java.utils.excel.SExcel;
 import seung.kimchi.java.utils.excel.SRow;
@@ -40,7 +34,6 @@ public class SXlsx {
 			workbook = new XSSFWorkbook(new ByteArrayInputStream(file));
 			sExcel.setNumberOfSheets(workbook.getNumberOfSheets());
 			
-			String value = null;
 			for(Sheet sheet : workbook) {
 				
 				sExcel.getSheets().add(readSheet(sheet));
@@ -62,8 +55,13 @@ public class SXlsx {
 				.physicalNumberOfRows(sheet.getPhysicalNumberOfRows())
 				.build()
 				;
+		int i = 0;
 		for(Row row : sheet) {
+			i++;
 			sSheet.getRows().add(readRow(row));
+			if(i > 2) {
+				break;
+			}
 		}// end of row
 		return sSheet;
 	}
