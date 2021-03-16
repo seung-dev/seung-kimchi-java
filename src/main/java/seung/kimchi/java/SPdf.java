@@ -18,6 +18,33 @@ public class SPdf {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public static byte[] decrypt(
+			byte[] data
+			, String password
+			) {
+		
+		byte[] pdf = null;
+		
+		try(
+				PDDocument pdDocument = PDDocument.load(data, password);
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				) {
+			
+			if(pdDocument.isEncrypted()) {
+				pdDocument.setAllSecurityToBeRemoved(true);
+			}
+			
+			pdDocument.save(byteArrayOutputStream);
+			
+			pdf = byteArrayOutputStream.toByteArray();
+			
+		} catch (IOException e) {
+			log.error("Failed to remove security.", e);
+		}
+		
+		return pdf;
+	}
+	
 	public static byte[] encrypt(
 			File file
 			, String key
