@@ -45,6 +45,8 @@ public class SEnv {
 	private boolean is_windows = false;
 	@Builder.Default
 	private boolean is_linux = false;
+	@Builder.Default
+	private boolean is_mac = false;
 	
 	// server
 	@Builder.Default
