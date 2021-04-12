@@ -35,4 +35,6 @@ public class SRequestBody {
 	@NotBlank(message = "요청코드(requestCode)는 필수항목 입니다.")
 	private String request_code;
 	
+	private SLinkedHashMap data;
+	
 }

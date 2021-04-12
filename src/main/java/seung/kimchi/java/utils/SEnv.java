@@ -54,16 +54,18 @@ public class SEnv {
 	private String host_name;
 	private String ip4v;
 	private String host;
-	private int server_port;
 	private int server_desc;
 	
 	// app
 	@Builder.Default
 	private int app_no = -1;
+	private int server_port;
 	private String app_name;
 	private String app_ver;
 	private String build_time;
 	private String app_path;
+	
+	// mode
 	private String app_mode;
 	@Builder.Default
 	private boolean is_ops = false;
