@@ -27,7 +27,7 @@ public class SText {
 	
 	public static String random(int min, int max, int maxLength, String padChar) {
 		int no = new Random().nextInt(max - min + 1) + min;
-		return pad(_PAD_LEFT, "" + no, maxLength, padChar);
+		return pad(_PAD_RIGHT, "" + no, maxLength, padChar);
 	}
 	public static int random(int min, int max) {
 		return new Random().nextInt(max - min + 1) + min;
