@@ -1,6 +1,7 @@
 package seung.kimchi.java.utils;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +33,8 @@ public class SRequestBody {
 		return json;
 	}
 	
-	@NotBlank(message = "요청코드(requestCode)는 필수항목 입니다.")
+	@Size(max = 36)
+	@NotBlank
 	private String request_code;
 	
 	private SLinkedHashMap data;

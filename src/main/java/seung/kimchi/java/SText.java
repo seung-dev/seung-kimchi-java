@@ -25,8 +25,11 @@ public class SText {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public static String random(int min, int max, int maxLength, String padChar) {
+		int no = new Random().nextInt(max - min + 1) + min;
+		return pad(_PAD_LEFT, "" + no, maxLength, padChar);
+	}
 	public static int random(int min, int max) {
-//		return (int) ((Math.random() * (max - min)) + min);
 		return new Random().nextInt(max - min + 1) + min;
 	}
 	
