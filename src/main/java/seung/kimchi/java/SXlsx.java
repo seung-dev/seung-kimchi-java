@@ -42,8 +42,10 @@ public class SXlsx {
 				
 			}// end of sheet
 			
+			sExcel.success();
+			
 		} catch (IOException e) {
-			log.error("Failed to read excel.");
+			sExcel.exception(e);
 		}
 		
 		return sExcel;
