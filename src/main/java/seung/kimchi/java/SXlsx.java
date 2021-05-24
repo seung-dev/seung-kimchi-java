@@ -37,8 +37,6 @@ public class SXlsx {
 			for(Sheet sheet : workbook) {
 				
 				sExcel.getSheets().add(readSheet(sheet));
-				sheet.getSheetName();
-				sheet.getPhysicalNumberOfRows();
 				
 			}// end of sheet
 			
@@ -57,13 +55,8 @@ public class SXlsx {
 				.physicalNumberOfRows(sheet.getPhysicalNumberOfRows())
 				.build()
 				;
-		int i = 0;
 		for(Row row : sheet) {
-			i++;
 			sSheet.getRows().add(readRow(row));
-			if(i > 2) {
-				break;
-			}
 		}// end of row
 		return sSheet;
 	}
