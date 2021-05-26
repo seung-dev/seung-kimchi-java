@@ -96,4 +96,8 @@ public class SDate {
 		return simpleDateFormat.format(date);
 	}
 	
+	public static String epoch() {
+		return Long.toString(new Date().getTime());
+	}
+	
 }
