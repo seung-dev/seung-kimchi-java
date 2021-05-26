@@ -96,6 +96,9 @@ public class SDate {
 		return simpleDateFormat.format(date);
 	}
 	
+	public static String epoch(String prefix) {
+		return String.format("%s.%s", prefix, epoch());
+	}
 	public static String epoch() {
 		return Long.toString(new Date().getTime());
 	}
