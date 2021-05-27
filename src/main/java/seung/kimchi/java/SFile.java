@@ -1,61 +1,75 @@
 package seung.kimchi.java;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class SFile {
 
-	public static String contentDisposition(
-			String userAgent
-			, String fileName
-			) throws UnsupportedEncodingException {
+	public static int zip(
+			String filePath
+			, List<String> entryPaths
+			) {
 		
-		String prefix = "attachment; filename=";
-		String suffix = "";
-		
-		switch(browser(userAgent)) {
-			case "MSIE":
-				suffix = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
-				break;
-			case "Chrome":
-				StringBuffer sb = new StringBuffer();
-				for(int i = 0; i < fileName.length(); i++) {
-					char c = fileName.charAt(i);
-					if(c > '~') {
-						sb.append(URLEncoder.encode("" + c, "UTF-8"));
-					} else {
-						sb.append(c);
-					}
+		FileOutputStream fileOutputStream = null;
+		ZipOutputStream zipOutputStream = null;
+		FileInputStream fileInputStream = null;
+		ZipEntry zipEntry = null;
+		try {
+			
+			fileOutputStream = new FileOutputStream(filePath);
+			zipOutputStream = new ZipOutputStream(fileOutputStream);
+			
+			byte[] b = null;
+			int len = 0;
+			int off = 0;
+			for(String entryPath : entryPaths) {
+				File file = new File(entryPath);
+				fileInputStream = new FileInputStream(file);
+				zipEntry = new ZipEntry(file.getName());
+				zipOutputStream.putNextEntry(zipEntry);
+				b = new byte[1024 * 4];
+				len = 0;
+				while((len = fileInputStream.read(b)) >= 0) {
+					zipOutputStream.write(b, off, len);
 				}
-				suffix = sb.toString();
-				break;
-			case "Opera":
-			case "Firefox":
-			default:
-				suffix = "\"" + new String(fileName.getBytes("UTF-8"), "8859_1") +"\"";
-				break;
+				zipOutputStream.flush();
+				fileInputStream.close();
+			}
+			
+		} catch (Exception e) {
+			try {
+				if(fileInputStream != null) {
+					fileInputStream.close();
+				}
+				if(zipOutputStream != null) {
+					zipOutputStream.close();
+				}
+				if(fileOutputStream != null) {
+					fileOutputStream.close();
+				}
+			} catch (IOException ioe) {
+			}
 		}
 		
-		return prefix.concat(suffix);
+		return isZip(filePath);
 	}
 	
-	public static String browser(String userAgent) {
-		
-		String browser = "";
-		
-		if(userAgent.indexOf("MSIE") > -1) {
-			browser = "MSIE";
-		} else if(userAgent.indexOf("Trident") > -1) {
-			browser = "MSIE";
-		} else if(userAgent.indexOf("Chrome") > -1) {
-			browser = "Chrome";
-		} else if(userAgent.indexOf("Opera") > -1) {
-			browser = "Opera";
-		} else {
-			browser = "Firefox";
+	public static int isZip(String filePath) {
+		int isZip = 0;
+		try (
+				ZipFile zipFile = new ZipFile(filePath);
+		) {
+			isZip = zipFile.size();
+		} catch (Exception e) {
+			isZip = -1;
 		}
-		
-		return browser;
+		return isZip;
 	}
 	
 }

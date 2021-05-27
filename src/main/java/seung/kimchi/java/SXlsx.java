@@ -21,38 +21,6 @@ import seung.kimchi.java.utils.excel.SSheet;
 @Slf4j
 public class SXlsx {
 
-	public static String[][] read(byte[] file, int sheetNo, int rowNoMax, int cellNoMax) {
-		
-		String[][] data = null;
-		
-		try {
-			
-			XSSFWorkbook workbook = new XSSFWorkbook(new ByteArrayInputStream(file));
-			Sheet sheet = workbook.getSheetAt(sheetNo);
-			Row row = null;
-			Cell cell = null;
-			
-			int getPhysicalNumberOfRows = sheet.getPhysicalNumberOfRows();
-			if(rowNoMax > getPhysicalNumberOfRows + 1) {
-				rowNoMax = getPhysicalNumberOfRows + 1;
-			}
-			
-			data = new String[getPhysicalNumberOfRows][cellNoMax];
-			for(int rowNo = 0; rowNo <= rowNoMax; rowNo++) {
-				row = sheet.getRow(rowNo);
-				for(int cellNo = 0; cellNo <= cellNoMax; cellNo++) {
-					cell = row.getCell(cellNo);
-					data[rowNo][cellNo] = cellValue(cell);
-				}
-			}
-			
-		} catch (Exception e) {
-			log.error("exception=", e);
-		}
-		
-		return data;
-	}
-	
 	public static SExcel read(byte[] file) {
 		
 		SExcel sExcel = SExcel.builder()
@@ -113,6 +81,36 @@ public class SXlsx {
 				.build();
 		sCell.setCellValue(cellValue(cell));
 		return sCell;
+	}
+	
+	public static String[][] read(Sheet sheet, int rowNoMax, int cellNoMax) {
+		
+		String[][] data = null;
+		
+		try {
+			
+			Row row = null;
+			Cell cell = null;
+			
+			int getPhysicalNumberOfRows = sheet.getPhysicalNumberOfRows();
+			if(rowNoMax > getPhysicalNumberOfRows + 1) {
+				rowNoMax = getPhysicalNumberOfRows + 1;
+			}
+			
+			data = new String[getPhysicalNumberOfRows][cellNoMax];
+			for(int rowNo = 0; rowNo <= rowNoMax; rowNo++) {
+				row = sheet.getRow(rowNo);
+				for(int cellNo = 0; cellNo <= cellNoMax; cellNo++) {
+					cell = row.getCell(cellNo);
+					data[rowNo][cellNo] = cellValue(cell);
+				}
+			}
+			
+		} catch (Exception e) {
+			log.error("exception=", e);
+		}
+		
+		return data;
 	}
 	
 	public static CellStyle[][] cellStyle(Sheet sheet, int rowNoMax, int cellNoMax) {
