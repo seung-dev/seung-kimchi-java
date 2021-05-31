@@ -114,8 +114,11 @@ public class SXlsx {
 	}
 	
 	public static CellStyle[][] cellStyle(Sheet sheet, int rowNoMax, int cellNoMax) {
+		return cellStyle(sheet, 0, rowNoMax, cellNoMax);
+	}
+	public static CellStyle[][] cellStyle(Sheet sheet, int rowNoMin, int rowNoMax, int cellNoMax) {
 		CellStyle[][] cellStyle = new CellStyle[rowNoMax + 1][cellNoMax + 1];
-		for(int rowNo = 0; rowNo <= rowNoMax; rowNo++) {
+		for(int rowNo = rowNoMin; rowNo <= rowNoMax; rowNo++) {
 			for(int cellNo = 0; cellNo <= cellNoMax; cellNo++) {
 				cellStyle[rowNo][cellNo] = sheet.getRow(rowNo).getCell(cellNo).getCellStyle();
 			}
