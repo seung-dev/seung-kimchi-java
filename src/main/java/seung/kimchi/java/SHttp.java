@@ -2,8 +2,10 @@ package seung.kimchi.java;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 import kong.unirest.HttpRequest;
+import kong.unirest.HttpRequestWithBody;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,189 @@ public class SHttp {
 //		
 //		return httpResponse;
 //	}
+	
+	public static HttpResponse<byte[]> post(
+			int try_size
+			, long sleep
+			, String url
+			, int connect_timeout
+			, int socket_timeout
+			, String proxy_host
+			, int proxy_port
+			, HashMap<String, String> cookie
+			, HashMap<String, String> header
+			, String body
+			) throws InterruptedException {
+		
+		HttpRequestWithBody httpRequestWithBody = null;
+		HttpResponse<byte[]> httpResponse = null;
+		
+		int try_no = 0;
+		while(try_no++ < try_size) {
+			try {
+				
+				httpRequestWithBody = Unirest.post(url);
+				httpRequestWithBody.connectTimeout(connect_timeout);
+				httpRequestWithBody.socketTimeout(socket_timeout);
+				
+				// proxy
+				if(proxy_host != null && !"".equals(proxy_host) && proxy_port != -1) {
+					httpRequestWithBody.proxy(proxy_host, proxy_port);
+				}
+				
+				// cookie
+				for(String key : cookie.keySet()) {
+					httpRequestWithBody.cookie(key, cookie.get(key));
+				}
+				
+				// header
+				for(String key : header.keySet()) {
+					httpRequestWithBody.header(key, header.get(key));
+				}
+				
+				httpResponse = httpRequestWithBody.body(body).asBytes();
+				if(200 == httpResponse.getStatus()) {
+					break;
+				} else {
+					Thread.sleep(sleep);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed to request.({}/{})", try_no, try_size, e);
+				if(sleep > 0) {
+					Thread.sleep(sleep);
+				}
+			}// end of try
+		}// end of while
+		
+		return httpResponse;
+	}
+	
+	public static HttpResponse<byte[]> post(
+			int try_size
+			, long sleep
+			, String url
+			, int connect_timeout
+			, int socket_timeout
+			, String proxy_host
+			, int proxy_port
+			, HashMap<String, String> cookie
+			, HashMap<String, String> header
+			, HashMap<String, Object> field
+			) throws InterruptedException {
+		
+		HttpRequestWithBody httpRequestWithBody = null;
+		HttpResponse<byte[]> httpResponse = null;
+		
+		int try_no = 0;
+		while(try_no++ < try_size) {
+			try {
+				
+				httpRequestWithBody = Unirest.post(url);
+				httpRequestWithBody.connectTimeout(connect_timeout);
+				httpRequestWithBody.socketTimeout(socket_timeout);
+				
+				// proxy
+				if(proxy_host != null && !"".equals(proxy_host) && proxy_port != -1) {
+					httpRequestWithBody.proxy(proxy_host, proxy_port);
+				}
+				
+				// cookie
+				for(String key : cookie.keySet()) {
+					httpRequestWithBody.cookie(key, cookie.get(key));
+				}
+				
+				// header
+				for(String key : header.keySet()) {
+					httpRequestWithBody.header(key, header.get(key));
+				}
+				
+				// field
+				httpRequestWithBody.fields(field);
+				
+				httpResponse = httpRequestWithBody.fields(field).asBytes();
+				if(200 == httpResponse.getStatus()) {
+					break;
+				} else {
+					Thread.sleep(sleep);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed to request.({}/{})", try_no, try_size, e);
+				if(sleep > 0) {
+					Thread.sleep(sleep);
+				}
+			}// end of try
+		}// end of while
+		
+		return httpResponse;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static HttpResponse<byte[]> get(
+			int try_size
+			, long sleep
+			, String url
+			, int connect_timeout
+			, int socket_timeout
+			, String proxy_host
+			, int proxy_port
+			, HashMap<String, String> cookie
+			, HashMap<String, String> header
+			, HashMap<String, String> query
+			) throws InterruptedException {
+		
+		HttpRequest httpRequest = null;
+		HttpResponse<byte[]> httpResponse = null;
+		
+		int try_no = 0;
+		while(try_no++ < try_size) {
+			try {
+				
+				httpRequest = Unirest.get(url);
+				httpRequest.connectTimeout(connect_timeout);
+				httpRequest.socketTimeout(socket_timeout);
+				
+				// proxy
+				if(proxy_host != null && !"".equals(proxy_host) && proxy_port != -1) {
+					httpRequest.proxy(proxy_host, proxy_port);
+				}
+				
+				// cookie
+				for(String key : cookie.keySet()) {
+					httpRequest.cookie(key, cookie.get(key));
+				}
+				
+				// header
+				for(String key : header.keySet()) {
+					httpRequest.header(key, header.get(key));
+				}
+				
+				// query
+				for(String key : query.keySet()) {
+					httpRequest.queryString(key, query.get(key));
+				}
+				
+				httpResponse = httpRequest.asBytes();
+				if(200 == httpResponse.getStatus()) {
+					break;
+				} else {
+					Thread.sleep(sleep);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("Failed to request.({}/{})", try_no, try_size, e);
+				if(sleep > 0) {
+					Thread.sleep(sleep);
+				}
+			}// end of try
+		}// end of while
+		
+		return httpResponse;
+	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static HttpResponse<byte[]> request(

@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.DataFormatException;
@@ -49,6 +50,36 @@ public class SConvert {
 		return stringWriter.toString();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static List<SLinkedHashMap> toListSLinkedHashMap(String data) {
+		List<SLinkedHashMap> items = null;
+		try {
+			if(data == null || "".equals(data)) {
+				log.error("Field data is empty.");
+			}
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.getSerializerProvider().setNullKeySerializer(new JsonSerializer<Object>() {
+				@Override
+				public void serialize(Object value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+					jsonGenerator.writeFieldName("");
+				}
+			});
+			items = objectMapper
+					.registerModule(
+							new SimpleModule("seung", Version.unknownVersion())
+							.addAbstractTypeMapping(Map.class, SLinkedHashMap.class)
+							)
+					.readValue(data, List.class)
+					;
+		} catch (JsonParseException e) {
+			log.error("Failed to convert to SLinkedHashMap.", e);
+		} catch (JsonMappingException e) {
+			log.error("Failed to convert to SLinkedHashMap.", e);
+		} catch (IOException e) {
+			log.error("Failed to convert to SLinkedHashMap.", e);
+		}
+		return items;
+	}
 	public static SLinkedHashMap toSLinkedHashMap(String data) {
 		SLinkedHashMap sLinkedHashMap = null;
 		try {

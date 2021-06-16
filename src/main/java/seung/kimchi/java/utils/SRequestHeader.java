@@ -38,10 +38,13 @@ public class SRequestHeader {
 	private long request_time = new Date().getTime();
 	
 	@Builder.Default
-	private SLinkedHashMap fields = new SLinkedHashMap();
+	private SLinkedHashMap session = new SLinkedHashMap();
 	
 	@Builder.Default
-	private SLinkedHashMap session = new SLinkedHashMap();
+	private SLinkedHashMap cookies = new SLinkedHashMap();
+	
+	@Builder.Default
+	private SLinkedHashMap fields = new SLinkedHashMap();
 	
 	@SuppressWarnings("unchecked")
 	public void put(String key, Object value) {
