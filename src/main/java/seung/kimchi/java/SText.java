@@ -57,7 +57,7 @@ public class SText {
 			log.info("Data is null.");
 			return data;
 		}
-		if(data.length() >= maxLength) {
+		if(data.length() > maxLength) {
 			log.info("Data length is bigger than maxLength.");
 			return data;
 		}
