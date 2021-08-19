@@ -390,10 +390,12 @@ public class SLinkedHashMap extends LinkedHashMap {
 	}
 	@SuppressWarnings("unchecked")
 	public SLinkedHashMap add(Object data) {
-//		Field[] fields = data.getClass().getDeclaredFields();
-		Field[] fields = data.getClass().getFields();
 		try {
-			for(Field field : fields) {
+			for(Field field : data.getClass().getSuperclass().getDeclaredFields()) {
+				field.setAccessible(true);
+				this.put(field.getName(), field.get(data));
+			}
+			for(Field field : data.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
 				this.put(field.getName(), field.get(data));
 			}
