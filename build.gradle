@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "seung.java"
-version = "1.0.17"
+version = "1.0.18"
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
@@ -46,16 +46,19 @@ dependencies {
 	// http
 	api("com.konghq:unirest-java:3.7.03")
 	
+	// bouncycastle
+	api("org.bouncycastle:bcprov-jdk15on:1.67")
+	api("org.bouncycastle:bcpkix-jdk15on:1.67")
+	
+	// unzip
+	api("net.lingala.zip4j:zip4j:2.9.0")
+	
 	// poi
 	api("org.apache.poi:poi:3.17")
 	api("org.apache.poi:poi-ooxml:3.17")
 	
 	// pdf
 	api("org.apache.pdfbox:pdfbox:2.0.22")
-	
-	// bouncycastle
-	api("org.bouncycastle:bcprov-jdk15on:1.67")
-	api("org.bouncycastle:bcpkix-jdk15on:1.67")
 }
 
 tasks.withType(JavaCompile) {
