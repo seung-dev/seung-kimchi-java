@@ -1,5 +1,6 @@
 package seung.kimchi.java;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -56,6 +57,15 @@ public class SDate {
 		}
 		
 		return addedDate;
+	}
+	
+	public static Long diff(Date date_from, Date date_to) {
+		return Math.abs(date_to.getTime() - date_from.getTime());
+	}
+	
+	public static Date toDate(String source, String pattern) throws ParseException {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		return simpleDateFormat.parse(source);
 	}
 	
 	public static int toInteger() {
