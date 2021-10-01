@@ -38,21 +38,28 @@ public class SRequestHeader {
 	private long request_time = new Date().getTime();
 	
 	@Builder.Default
-	private SLinkedHashMap session = new SLinkedHashMap();
+	private SLinkedHashMap headers = new SLinkedHashMap();
 	
 	@Builder.Default
 	private SLinkedHashMap cookies = new SLinkedHashMap();
 	
 	@Builder.Default
-	private SLinkedHashMap fields = new SLinkedHashMap();
+	private SLinkedHashMap session = new SLinkedHashMap();
 	
-	@SuppressWarnings("unchecked")
-	public void put(String key, Object value) {
-		this.fields.put(key, value);
+	public void headers(String key, Object value) {
+		this.headers.add(key, value);
 	}
 	
-	public String get(String key) {
-		return this.fields.getString(key, "");
+	public String headers(String key) {
+		return this.headers.getString(key, "");
+	}
+	
+	public void cookies(String key, Object value) {
+		this.cookies.add(key, value);
+	}
+	
+	public String cookies(String key) {
+		return this.cookies.getString(key, "");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -64,7 +71,7 @@ public class SRequestHeader {
 		return this.session.get(key);
 	}
 	
-	public String sessionString(Object key) {
+	public String sessionText(Object key) {
 		return this.session.getString(key, "");
 	}
 	
