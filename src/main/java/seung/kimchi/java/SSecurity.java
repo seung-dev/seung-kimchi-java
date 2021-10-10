@@ -409,7 +409,7 @@ public class SSecurity {
 			});
 			providers.add(new SLinkedHashMap()
 					.add("name", provider.getName())
-					.add("version", provider.getVersion())
+					.add("version", provider.getVersionStr())
 					.add("info", provider.getInfo())
 					.add("service", service)
 					);

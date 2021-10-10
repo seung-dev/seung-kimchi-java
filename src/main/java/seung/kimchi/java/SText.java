@@ -149,4 +149,11 @@ public class SText {
 		return UUID.randomUUID().toString().replaceAll(regex, replacement);
 	}
 	
+	public static String trim(String data) {
+		if(data == null) {
+			return "";
+		}
+		return data.replaceAll("^\\s+|\\s+$", "");
+	}
+	
 }
