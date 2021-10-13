@@ -203,7 +203,6 @@ public class SConvert {
 		String json = "";
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 			objectMapper.getSerializerProvider().setNullKeySerializer(new JsonSerializer<Object>() {
 				@Override
 				public void serialize(Object value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
@@ -214,6 +213,7 @@ public class SConvert {
 				if(indent == null) {
 					indent = "  ";
 				}
+				objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 				DefaultIndenter defaultIndenter = new DefaultIndenter();
 				defaultIndenter.withIndent(indent);
 				defaultIndenter.withLinefeed(DefaultIndenter.SYS_LF);
