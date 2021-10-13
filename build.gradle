@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "seung.java"
-version = "1.0.28"
+version = "1.0.29"
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 

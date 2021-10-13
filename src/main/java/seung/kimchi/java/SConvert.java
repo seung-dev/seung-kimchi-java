@@ -29,7 +29,6 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter.Indenter;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -213,7 +212,6 @@ public class SConvert {
 				if(indent == null) {
 					indent = "  ";
 				}
-				objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 				DefaultIndenter defaultIndenter = new DefaultIndenter();
 				defaultIndenter.withIndent(indent);
 				defaultIndenter.withLinefeed(DefaultIndenter.SYS_LF);
