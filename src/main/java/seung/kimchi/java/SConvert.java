@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter.Indenter;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -136,7 +137,7 @@ public class SConvert {
 	 * @version 1.0.0
 	 */
 	public static String stringify(Object data) {
-		return stringify(data, false, "  ");
+		return stringify(data, false, "");
 	}
 	/**
 	 * <h1>Description</h1>
@@ -202,6 +203,7 @@ public class SConvert {
 		String json = "";
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 			objectMapper.getSerializerProvider().setNullKeySerializer(new JsonSerializer<Object>() {
 				@Override
 				public void serialize(Object value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
