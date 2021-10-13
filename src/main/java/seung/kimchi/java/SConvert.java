@@ -19,16 +19,15 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter.Indenter;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -136,38 +135,7 @@ public class SConvert {
 	 * @version 1.0.0
 	 */
 	public static String stringify(Object data) {
-		return stringify(data, false, "");
-	}
-	/**
-	 * <h1>Description</h1>
-	 * <pre>{@code
-	 * Convert to json format text.
-	 * }</pre>
-	 * <h1>Usage</h1>
-	 * <pre>{@code
-	 * Map<String, String> map = new HashMap<>();
-	 * map.put("key1", "value1");
-	 * map.put("key2", "value2");
-	 * System.out.println(SConvert.stringify(map, 0));
-	 * System.out.println(SConvert.stringify(map, 1));
-	 * }</pre>
-	 * <h1>Equal</h1>
-	 * <pre>{@code
-	 * Map<String, String> map = new HashMap<>();
-	 * map.put("key1", "value1");
-	 * map.put("key2", "value2");
-	 * System.out.println(SConvert.stringify(map, 0, "  "));
-	 * System.out.println(SConvert.stringify(map, 1, "  "));
-	 * }</pre>
-	 * <hr>
-	 * @param data
-	 * @param isPretty - {@link Boolean#FALSE}, {@link Boolean#TRUE}
-	 * @author seung
-	 * @since 2021.01.04
-	 * @version 1.0.0
-	 */
-	public static String stringify(Object data, boolean isPretty) {
-		return stringify(data, isPretty, "  ");
+		return stringify(data, false);
 	}
 	/**
 	 * <h1>Description</h1>
@@ -186,19 +154,11 @@ public class SConvert {
 	 * @param data
 	 * @param isPretty - {@link Boolean#FALSE}, {@link Boolean#TRUE}
 	 * @param indent - default: 2 spaces
-	 * @see ObjectMapper#writeValueAsString(Object)
-	 * @see ObjectMapper#writerWithDefaultPrettyPrinter()
-	 * @see ObjectMapper#setDefaultPrettyPrinter(com.fasterxml.jackson.core.PrettyPrinter)
-	 * @see ObjectMapper#getSerializerProvider()
-	 * @see DefaultPrettyPrinter#indentObjectsWith(Indenter)
-	 * @see DefaultPrettyPrinter#indentArraysWith(Indenter)
-	 * @see DefaultIndenter#withIndent(String)
-	 * @see DefaultIndenter#withLinefeed(String)
 	 * @author seung
 	 * @since 2021.01.04
 	 * @version 1.0.0
 	 */
-	public static String stringify(Object data, boolean isPretty, String indent) {
+	public static String stringify(Object data, boolean isPretty) {
 		String json = "";
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -208,24 +168,13 @@ public class SConvert {
 					jsonGenerator.writeFieldName("");
 				}
 			});
-			if(isPretty) {
-				if(indent == null) {
-					indent = "  ";
-				}
-				DefaultIndenter defaultIndenter = new DefaultIndenter();
-				defaultIndenter.withIndent(indent);
-				defaultIndenter.withLinefeed(DefaultIndenter.SYS_LF);
-				DefaultPrettyPrinter defaultPrettyPrinter = new DefaultPrettyPrinter();
-				defaultPrettyPrinter.indentObjectsWith(defaultIndenter);
-				defaultPrettyPrinter.indentArraysWith(defaultIndenter);
-				json = objectMapper
-						.setDefaultPrettyPrinter(defaultPrettyPrinter)
-						.writerWithDefaultPrettyPrinter()
-						.writeValueAsString(data)
-						;
-			} else {
-				json = objectMapper.writeValueAsString(data);
-			}
+			json = objectMapper
+					.setSerializationInclusion(Include.ALWAYS)
+					.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+					.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true)
+					.configure(SerializationFeature.INDENT_OUTPUT, isPretty)
+					.writeValueAsString(data)
+					;
 		} catch (JsonProcessingException e) {
 			log.error("Failed to convert to json format text.", e);
 		}

@@ -22,13 +22,10 @@ public class SLinkedHashMap extends LinkedHashMap {
 	public SLinkedHashMap() {}
 	
 	public String stringify() {
-		return stringify(false, "");
+		return stringify(false);
 	}
 	public String stringify(boolean isPretty) {
-		return stringify(isPretty, "  ");
-	}
-	public String stringify(boolean isPretty, String indent) {
-		return SConvert.stringify(this, isPretty, indent);
+		return SConvert.stringify(this, isPretty);
 	}
 	
 	public SLinkedHashMap(Map data) {
