@@ -50,7 +50,7 @@ public class SRequestHeader {
 		this.header.add(key, value);
 	}
 	
-	public String headers(String key) {
+	public String header(String key) {
 		return this.header.getString(key, "");
 	}
 	
