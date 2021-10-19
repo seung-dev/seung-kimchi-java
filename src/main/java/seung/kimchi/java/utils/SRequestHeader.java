@@ -38,28 +38,28 @@ public class SRequestHeader {
 	private long request_time = new Date().getTime();
 	
 	@Builder.Default
-	private SLinkedHashMap headers = new SLinkedHashMap();
+	private SLinkedHashMap header = new SLinkedHashMap();
 	
 	@Builder.Default
-	private SLinkedHashMap cookies = new SLinkedHashMap();
+	private SLinkedHashMap cookie = new SLinkedHashMap();
 	
 	@Builder.Default
 	private SLinkedHashMap session = new SLinkedHashMap();
 	
-	public void headers(String key, Object value) {
-		this.headers.add(key, value);
+	public void header(String key, Object value) {
+		this.header.add(key, value);
 	}
 	
 	public String headers(String key) {
-		return this.headers.getString(key, "");
+		return this.header.getString(key, "");
 	}
 	
-	public void cookies(String key, Object value) {
-		this.cookies.add(key, value);
+	public void cookie(String key, Object value) {
+		this.cookie.add(key, value);
 	}
 	
-	public String cookies(String key) {
-		return this.cookies.getString(key, "");
+	public String cookie(String key) {
+		return this.cookie.getString(key, "");
 	}
 	
 	@SuppressWarnings("unchecked")
