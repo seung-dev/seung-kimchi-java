@@ -1,7 +1,11 @@
 package seung.kimchi.java;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -10,9 +14,13 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import lombok.extern.slf4j.Slf4j;
+import seung.kimchi.java.utils.SLinkedHashMap;
 import seung.kimchi.java.utils.excel.SCell;
 import seung.kimchi.java.utils.excel.SExcel;
 import seung.kimchi.java.utils.excel.SRow;
@@ -37,7 +45,7 @@ public class SXlsx {
 			
 			for(Sheet sheet : workbook) {
 				
-				sExcel.getSheets().add(readSheet(sheet));
+				sExcel.getSheets().add(read_sheet(sheet));
 				
 			}// end of sheet
 			
@@ -51,39 +59,39 @@ public class SXlsx {
 		return sExcel;
 	}
 	
-	public static SSheet readSheet(Sheet sheet) {
+	public static SSheet read_sheet(Sheet sheet) {
 		SSheet sSheet = SSheet.builder()
 				.sheetName(sheet.getSheetName())
 				.physicalNumberOfRows(sheet.getPhysicalNumberOfRows())
 				.build()
 				;
 		for(Row row : sheet) {
-			sSheet.getRows().add(readRow(row));
+			sSheet.getRows().add(read_row(row));
 		}// end of row
 		return sSheet;
 	}
 	
-	public static SRow readRow(Row row) {
+	public static SRow read_row(Row row) {
 		SRow sRow = SRow.builder()
 				.rowNum(row.getRowNum())
 				.build()
 				;
 		for(Cell cell : row) {
-			sRow.getCells().add(readCell(cell));
+			sRow.getCells().add(read_cell(cell));
 		}// end of cell
 		return sRow;
 	}
 	
-	public static SCell readCell(Cell cell) {
+	public static SCell read_cell(Cell cell) {
 		SCell sCell = SCell.builder()
 				.rowIndex(cell.getRowIndex())
 				.columnIndex(cell.getColumnIndex())
 				.build();
-		sCell.setCellValue(cellValue(cell));
+		sCell.setCellValue(cell_value(cell));
 		return sCell;
 	}
 	
-	public static String[][] read(Sheet sheet, int rowNoMax, int cellNoMax) {
+	public static String[][] read(Sheet sheet, int row_no_max, int cell_no_max) {
 		
 		String[][] data = null;
 		
@@ -93,16 +101,16 @@ public class SXlsx {
 			Cell cell = null;
 			
 			int getPhysicalNumberOfRows = sheet.getPhysicalNumberOfRows();
-			if(rowNoMax > getPhysicalNumberOfRows + 1) {
-				rowNoMax = getPhysicalNumberOfRows + 1;
+			if(row_no_max > getPhysicalNumberOfRows + 1) {
+				row_no_max = getPhysicalNumberOfRows + 1;
 			}
 			
-			data = new String[getPhysicalNumberOfRows][cellNoMax];
-			for(int rowNo = 0; rowNo <= rowNoMax; rowNo++) {
-				row = sheet.getRow(rowNo);
-				for(int cellNo = 0; cellNo <= cellNoMax; cellNo++) {
-					cell = row.getCell(cellNo);
-					data[rowNo][cellNo] = cellValue(cell);
+			data = new String[getPhysicalNumberOfRows][cell_no_max];
+			for(int row_no = 0; row_no <= row_no_max; row_no++) {
+				row = sheet.getRow(row_no);
+				for(int cell_no = 0; cell_no <= cell_no_max; cell_no++) {
+					cell = row.getCell(cell_no);
+					data[row_no][cell_no] = cell_value(cell);
 				}
 			}
 			
@@ -113,57 +121,243 @@ public class SXlsx {
 		return data;
 	}
 	
-	public static CellStyle[][] cellStyle(Sheet sheet, int rowNoMax, int cellNoMax) {
-		return cellStyle(sheet, 0, rowNoMax, cellNoMax);
-	}
-	public static CellStyle[][] cellStyle(Sheet sheet, int rowNoMin, int rowNoMax, int cellNoMax) {
-		CellStyle[][] cellStyle = new CellStyle[rowNoMax + 1][cellNoMax + 1];
-		for(int rowNo = rowNoMin; rowNo <= rowNoMax; rowNo++) {
-			for(int cellNo = 0; cellNo <= cellNoMax; cellNo++) {
-				cellStyle[rowNo][cellNo] = sheet.getRow(rowNo).getCell(cellNo).getCellStyle();
+	public static byte[] write(
+			String request_code
+			, byte[] read_bytes
+			, SLinkedHashMap excel_data
+			) {
+		
+		byte[] excel = null;
+		
+		ByteArrayInputStream byteArrayInputStream = null;
+		ByteArrayOutputStream byteArrayOutputStream = null;
+		XSSFWorkbook read_workbook = null;
+		try {
+			
+			byteArrayInputStream = new ByteArrayInputStream(read_bytes);
+			byteArrayOutputStream = new ByteArrayOutputStream();
+			read_workbook = new XSSFWorkbook(byteArrayInputStream);
+			
+			while(true) {
+				
+				List<SLinkedHashMap> sheets = excel_data.getListSLinkedHashMap("sheets");
+				
+				SLinkedHashMap sheet_data = null;
+				for(int sheet_no = 0; sheet_no < read_workbook.getNumberOfSheets(); sheet_no++) {
+					
+					if(sheets != null) {
+						sheet_data = sheets.get(sheet_no);
+						if(!sheet_data.isEmpty("sheet_name")) {
+							read_workbook.setSheetName(sheet_no, sheet_data.getString("sheet_name"));
+						}
+					} else {
+						sheet_data = new SLinkedHashMap();
+					}
+					
+					write_sheet(read_workbook, read_workbook.getSheetAt(sheet_no), sheet_data);
+					
+				}// end of sheet
+				
+				break;
+			}// end of while
+			
+			read_workbook.write(byteArrayOutputStream);
+			
+		} catch (Exception e) {
+			log.error("({}) exception=", request_code, e);
+		} finally {
+			try {
+				if(byteArrayOutputStream != null) {
+					excel = byteArrayOutputStream.toByteArray();
+					byteArrayOutputStream.close();
+				}
+				if(byteArrayInputStream != null) {
+					byteArrayInputStream.close();
+				}
+			} catch (IOException e) {
+				log.error("({}) exception=", request_code, e);
 			}
 		}
-		return cellStyle;
-	}
-	
-	public static short[] rowHeight(Sheet sheet, int rowNoMax) {
-		short[] rowHeight = new short[rowNoMax + 1];
-		for(int rowNo = 0; rowNo <= rowNoMax; rowNo++) {
-			rowHeight[rowNo] = sheet.getRow(rowNo).getHeight();
-		}
-		return rowHeight;
-	}
-	
-	public static int[] columnWidth(Sheet sheet, int cellNoMax) {
-		int[] columnWidth = new int[cellNoMax + 1];
-		for(int cellNo = 0; cellNo <= cellNoMax; cellNo++) {
-			columnWidth[cellNo] = sheet.getColumnWidth(cellNo);
-		}
-		return columnWidth;
-	}
-	
-	public static String cellValue(Cell cell) {
 		
-		String cellValue = null;
+		return excel;
+	}
+	
+	private static void write_sheet(
+			XSSFWorkbook read_workbook
+			, XSSFSheet read_sheet
+			, SLinkedHashMap sheet_data
+			) {
+		
+		if("1".equals(sheet_data.getString("is_map", ""))) {
+//			write_sheet_cells(read_sheet, sheet_data);
+		} else {
+			write_sheet_rows(read_workbook, read_sheet, sheet_data);
+		}
+		
+	}
+	
+	private static int write_sheet_rows(
+			XSSFWorkbook read_workbook
+			, XSSFSheet read_sheet
+			, SLinkedHashMap sheet_data
+			) {
+		
+		int row_no = sheet_data.getInt("row_no");
+		int cell_no_max = read_sheet.getRow(row_no).getPhysicalNumberOfCells() - 1;
+		
+		// style
+		short read_row_height = read_sheet.getRow(row_no).getHeight();
+		CellStyle[] read_cell_style = cell_style(read_sheet, row_no, cell_no_max);
+		
+		// remove
+		read_sheet.removeRow(read_sheet.getRow(row_no));
+		
+		List<SLinkedHashMap> rows = sheet_data.getListSLinkedHashMap("rows");
+		if(rows == null) {
+			return 1;
+		}
+		
+		XSSFRow write_row = null;
+		int cell_no = 0;
+		XSSFCell write_cell = null;
+		for(SLinkedHashMap row : rows) {
+			
+			write_row = read_sheet.createRow(row_no++);
+			
+			write_row.setHeight(read_row_height);
+			
+			cell_no = 0;
+			for(String field_name : row.keyList()) {
+				
+				write_cell = write_row.createCell(cell_no);
+				write_cell.setCellValue(row.getString(field_name));
+				write_cell.setCellStyle(read_cell_style[cell_no]);
+				cell_no++;
+				
+			}// end of row
+			
+		}// end of rows
+		
+		return 1;
+	}
+	
+//	private static int write_sheet_cells(
+//			XSSFSheet read_sheet
+//			, SLinkedHashMap data
+//			) {
+//		
+//		SLinkedHashMap cells = data.getSLinkedHashMap("cells");
+//		
+//		return 1;
+//	}
+	
+	private static CellStyle[] cell_style(Sheet sheet, int row_no, int cell_no_max) {
+		CellStyle[] cell_style = new CellStyle[cell_no_max + 1];
+		for(int cell_no = 0; cell_no <= cell_no_max; cell_no++) {
+			cell_style[cell_no] = sheet.getRow(row_no).getCell(cell_no).getCellStyle();
+		}
+		return cell_style;
+	}
+	
+//	private static CellStyle[][] cell_style(Sheet sheet, int row_no_min, int row_no_max, int cell_no_max) {
+//		CellStyle[][] cell_style = new CellStyle[row_no_max + 1][cell_no_max + 1];
+//		for(int row_no = row_no_min; row_no <= row_no_max; row_no++) {
+//			cell_style[row_no] = cell_style(sheet, row_no, cell_no_max);
+//		}
+//		return cell_style;
+//	}
+	
+	public static short[] row_height(Sheet sheet, int row_no_min, int row_no_max) {
+		short[] row_height = new short[row_no_max - row_no_min + 1];
+		for(int row_no = row_no_min; row_no <= row_no_max; row_no++) {
+			row_height[row_no] = sheet.getRow(row_no).getHeight();
+		}
+		return row_height;
+	}
+	
+	public static int[] column_width(Sheet sheet, int cell_no_min, int cell_no_max) {
+		int[] column_width = new int[cell_no_max - cell_no_min + 1];
+		for(int cell_no = cell_no_min; cell_no <= cell_no_max; cell_no++) {
+			column_width[cell_no] = sheet.getColumnWidth(cell_no);
+		}
+		return column_width;
+	}
+	
+	public static String cell_value(Cell cell) {
+		
+		String cell_value = null;
 		if(CellType.STRING == cell.getCellTypeEnum()) {
-			cellValue = cell.getStringCellValue();
+			cell_value = cell.getStringCellValue();
 		} else if(CellType.NUMERIC == cell.getCellTypeEnum()) {
-			cellValue = cell.getStringCellValue();
+			cell_value = cell.getStringCellValue();
 		} else if(CellType.BOOLEAN == cell.getCellTypeEnum()) {
 			if(DateUtil.isCellDateFormatted(cell)) {
-				cellValue = "" + cell.getDateCellValue();
+				cell_value = "" + cell.getDateCellValue();
 			} else {
-				cellValue = NumberToTextConverter.toText(cell.getNumericCellValue());
+				cell_value = NumberToTextConverter.toText(cell.getNumericCellValue());
 			}
 		} else if(CellType.FORMULA == cell.getCellTypeEnum()) {
-			cellValue = cell.getCellFormula();
+			cell_value = cell.getCellFormula();
 		} else if(CellType.BLANK == cell.getCellTypeEnum()) {
-			cellValue = "";
+			cell_value = "";
 		} else if(CellType._NONE == cell.getCellTypeEnum()) {
-			cellValue = "";
+			cell_value = "";
 		}
 		
-		return cellValue;
+		return cell_value;
+	}
+	
+	public static String content_disposition(
+			String user_agent
+			, String file_name
+			) throws UnsupportedEncodingException {
+		
+		String prefix = "attachment; filename=";
+		String suffix = "";
+		
+		switch(browser(user_agent)) {
+			case "MSIE":
+				suffix = URLEncoder.encode(file_name, "UTF-8").replaceAll("\\+", "%20");
+				break;
+			case "Chrome":
+				StringBuffer sb = new StringBuffer();
+				for(int i = 0; i < file_name.length(); i++) {
+					char c = file_name.charAt(i);
+					if(c > '~') {
+						sb.append(URLEncoder.encode("" + c, "UTF-8"));
+					} else {
+						sb.append(c);
+					}
+				}
+				suffix = sb.toString();
+				break;
+			case "Opera":
+			case "Firefox":
+			default:
+				suffix = "\"" + new String(file_name.getBytes("UTF-8"), "8859_1") +"\"";
+				break;
+		}
+		
+		return prefix.concat(suffix);
+	}
+	
+	public static String browser(String user_agent) {
+		
+		String browser = "";
+		
+		if(user_agent.indexOf("MSIE") > -1) {
+			browser = "MSIE";
+		} else if(user_agent.indexOf("Trident") > -1) {
+			browser = "MSIE";
+		} else if(user_agent.indexOf("Chrome") > -1) {
+			browser = "Chrome";
+		} else if(user_agent.indexOf("Opera") > -1) {
+			browser = "Opera";
+		} else {
+			browser = "Firefox";
+		}
+		
+		return browser;
 	}
 	
 }

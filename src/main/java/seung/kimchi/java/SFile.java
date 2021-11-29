@@ -1,16 +1,20 @@
 package seung.kimchi.java;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.FileUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,11 +47,11 @@ public class SFile {
 	}
 	
 	public static int zip(
-			String filePath
-			, List<String> entryPaths
+			String file_path
+			, List<String> file_path_list
 			) {
 		
-		File file = new File(filePath);
+		File file = new File(file_path);
 		if(file.exists()) {
 			file.delete();
 		}
@@ -56,11 +60,11 @@ public class SFile {
 		ZipOutputStream zipOutputStream = null;
 		try {
 			
-			fileOutputStream = new FileOutputStream(filePath);
+			fileOutputStream = new FileOutputStream(file_path);
 			zipOutputStream = new ZipOutputStream(fileOutputStream);
 			
-			for(String entryPath : entryPaths) {
-				addZipEntry(zipOutputStream, entryPath);
+			for(String entry_path : file_path_list) {
+				add_zip_entry(zipOutputStream, entry_path);
 			}
 			
 			zipOutputStream.flush();
@@ -80,15 +84,74 @@ public class SFile {
 			}
 		}
 		
-		return isZip(filePath);
+		return isZip(file_path);
 	}
 	
-	public static void addZipEntry(
+	public static int isZip(String filePath) {
+		int isZip = 0;
+		ZipFile zipFile = null;
+		try {
+			zipFile = new ZipFile(filePath);
+			isZip = zipFile.size();
+		} catch (Exception e) {
+			log.error("exception=", e);
+			isZip = -1;
+		} finally {
+			try {
+				if(zipFile != null) {
+					zipFile.close();
+				}
+			} catch (IOException e) {
+				log.error("exception=", e);
+			}
+		}
+		return isZip;
+	}
+	
+	public static byte[] zip(
+			List<String> file_path_list
+			) {
+		
+		byte[] zip = null;
+		
+		ByteArrayOutputStream byteArrayOutputStream = null;
+		ZipOutputStream zipOutputStream = null;
+		try {
+			
+			byteArrayOutputStream = new ByteArrayOutputStream();
+			zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
+			
+			for(String entry_path : file_path_list) {
+				add_zip_entry(zipOutputStream, entry_path);
+			}
+			
+			zipOutputStream.flush();
+			
+		} catch (Exception e) {
+			log.error("exception=", e);
+		} finally {
+			try {
+				if(zipOutputStream != null) {
+					zipOutputStream.close();
+				}
+				if(byteArrayOutputStream != null) {
+					zip = byteArrayOutputStream.toByteArray();
+					byteArrayOutputStream.close();
+				}
+			} catch (IOException e) {
+				log.error("exception=", e);
+			}
+		}
+		
+		return zip;
+	}
+	
+	public static void add_zip_entry(
 			ZipOutputStream zipOutputStream
-			, String filePath
+			, String entry_path
 			) throws IOException {
 		
-		File file = new File(filePath);
+		File file = new File(entry_path);
 		String fileName = file.getName();
 		
 		FileInputStream fileInputStream = null;
@@ -123,27 +186,6 @@ public class SFile {
 			}
 		}
 		
-	}
-	
-	public static int isZip(String filePath) {
-		int isZip = 0;
-		ZipFile zipFile = null;
-		try {
-			zipFile = new ZipFile(filePath);
-			isZip = zipFile.size();
-		} catch (Exception e) {
-			log.error("exception=", e);
-			isZip = -1;
-		} finally {
-			try {
-				if(zipFile != null) {
-					zipFile.close();
-				}
-			} catch (IOException e) {
-				log.error("exception=", e);
-			}
-		}
-		return isZip;
 	}
 	
 }
