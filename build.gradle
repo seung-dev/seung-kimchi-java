@@ -46,7 +46,7 @@ dependencies {
 	api("com.fasterxml.jackson.core:jackson-databind:2.9.9.3")
 	
 	// http
-	api("com.konghq:unirest-java:3.7.03")
+	api("com.konghq:unirest-java:3.13.0")
 	
 	// bouncycastle
 	api("org.bouncycastle:bcprov-jdk15on:1.67")
