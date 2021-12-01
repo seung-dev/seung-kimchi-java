@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SRequestBody implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2713597337910316580L;
 	
 	public String stringify(boolean isPretty) {
 		String json = "";

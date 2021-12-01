@@ -22,7 +22,9 @@ import seung.kimchi.java.SConvert;
 @Slf4j
 public class SLinkedHashMap extends LinkedHashMap {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2812753589206975392L;
+	
+	private static final List<String> _EXCLUDE_REFLECTION_FIELDS = Arrays.asList("log", "serialVersionUID");
 	
 	public SLinkedHashMap() {}
 	
@@ -409,7 +411,7 @@ public class SLinkedHashMap extends LinkedHashMap {
 			for(Field field : data.getClass().getSuperclass().getDeclaredFields()) {
 				field.setAccessible(true);
 				field_name = field.getName();
-				if("log".equals(field_name)) {
+				if(_EXCLUDE_REFLECTION_FIELDS.contains(field_name)) {
 					continue;
 				}
 				this.put(field_name, field.get(data));
@@ -417,7 +419,7 @@ public class SLinkedHashMap extends LinkedHashMap {
 			for(Field field : data.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
 				field_name = field.getName();
-				if("log".equals(field_name)) {
+				if(_EXCLUDE_REFLECTION_FIELDS.contains(field_name)) {
 					continue;
 				}
 				this.put(field_name, field.get(data));
