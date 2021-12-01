@@ -22,7 +22,7 @@ import seung.kimchi.java.SConvert;
 @Slf4j
 public class SLinkedHashMap extends LinkedHashMap {
 
-	private static final long serialVersionUID = -2812753589206975392L;
+	private static final long serialVersionUID = 1L;
 	
 	private static final List<String> _EXCLUDE_REFLECTION_FIELDS = Arrays.asList("log", "serialVersionUID");
 	
