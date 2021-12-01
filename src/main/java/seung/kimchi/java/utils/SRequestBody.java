@@ -1,5 +1,7 @@
 package seung.kimchi.java.utils;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -15,8 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Getter
 @Slf4j
-public class SRequestBody {
+public class SRequestBody implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	public String stringify(boolean isPretty) {
 		String json = "";
 		try {

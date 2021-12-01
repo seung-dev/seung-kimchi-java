@@ -405,13 +405,22 @@ public class SLinkedHashMap extends LinkedHashMap {
 	@SuppressWarnings("unchecked")
 	public SLinkedHashMap add(Object data) {
 		try {
+			String field_name = "";
 			for(Field field : data.getClass().getSuperclass().getDeclaredFields()) {
 				field.setAccessible(true);
-				this.put(field.getName(), field.get(data));
+				field_name = field.getName();
+				if("log".equals(field_name)) {
+					continue;
+				}
+				this.put(field_name, field.get(data));
 			}
 			for(Field field : data.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
-				this.put(field.getName(), field.get(data));
+				field_name = field.getName();
+				if("log".equals(field_name)) {
+					continue;
+				}
+				this.put(field_name, field.get(data));
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("Failed to convert to SLinkedHashMap.", e);
