@@ -397,6 +397,17 @@ public class SLinkedHashMap extends LinkedHashMap {
 		return null;
 	}
 	
+	public byte[] getByteArray(Object key) {
+		if(isEmpty(key)) {
+			return null;
+		}
+		Object value = get(key);
+		if(value instanceof byte[]) {
+			return (byte[]) value;
+		}
+		return null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public SLinkedHashMap add(Map data) {
 		if(data != null) {

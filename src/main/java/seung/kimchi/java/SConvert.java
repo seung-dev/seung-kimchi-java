@@ -314,6 +314,9 @@ public class SConvert {
 		}
 		return data;
 	}
+	public static byte[] decodeBase64(String encoded, String charset) throws UnsupportedEncodingException {
+		return Base64.decodeBase64(encoded.getBytes(charset));
+	}
 	/**
 	 * <h1>Description</h1>
 	 * <pre>{@code

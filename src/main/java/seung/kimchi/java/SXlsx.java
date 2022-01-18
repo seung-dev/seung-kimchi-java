@@ -59,7 +59,7 @@ public class SXlsx {
 		return sExcel;
 	}
 	
-	public static SSheet read_sheet(Sheet sheet) {
+	private static SSheet read_sheet(Sheet sheet) {
 		SSheet sSheet = SSheet.builder()
 				.sheetName(sheet.getSheetName())
 				.physicalNumberOfRows(sheet.getPhysicalNumberOfRows())
@@ -71,7 +71,7 @@ public class SXlsx {
 		return sSheet;
 	}
 	
-	public static SRow read_row(Row row) {
+	private static SRow read_row(Row row) {
 		SRow sRow = SRow.builder()
 				.rowNum(row.getRowNum())
 				.build()
@@ -82,7 +82,7 @@ public class SXlsx {
 		return sRow;
 	}
 	
-	public static SCell read_cell(Cell cell) {
+	private static SCell read_cell(Cell cell) {
 		SCell sCell = SCell.builder()
 				.rowIndex(cell.getRowIndex())
 				.columnIndex(cell.getColumnIndex())
@@ -91,35 +91,35 @@ public class SXlsx {
 		return sCell;
 	}
 	
-	public static String[][] read(Sheet sheet, int row_no_max, int cell_no_max) {
-		
-		String[][] data = null;
-		
-		try {
-			
-			Row row = null;
-			Cell cell = null;
-			
-			int getPhysicalNumberOfRows = sheet.getPhysicalNumberOfRows();
-			if(row_no_max > getPhysicalNumberOfRows + 1) {
-				row_no_max = getPhysicalNumberOfRows + 1;
-			}
-			
-			data = new String[getPhysicalNumberOfRows][cell_no_max];
-			for(int row_no = 0; row_no <= row_no_max; row_no++) {
-				row = sheet.getRow(row_no);
-				for(int cell_no = 0; cell_no <= cell_no_max; cell_no++) {
-					cell = row.getCell(cell_no);
-					data[row_no][cell_no] = cell_value(cell);
-				}
-			}
-			
-		} catch (Exception e) {
-			log.error("exception=", e);
-		}
-		
-		return data;
-	}
+//	private static String[][] read(Sheet sheet, int row_no_begin, int row_no_max, int cell_no_max) {
+//		
+//		String[][] data = null;
+//		
+//		try {
+//			
+//			Row row = null;
+//			Cell cell = null;
+//			
+//			int getPhysicalNumberOfRows = sheet.getPhysicalNumberOfRows();
+//			if(row_no_max > getPhysicalNumberOfRows + 1) {
+//				row_no_max = getPhysicalNumberOfRows + 1;
+//			}
+//			
+//			data = new String[getPhysicalNumberOfRows][cell_no_max];
+//			for(int row_no = row_no_begin; row_no <= row_no_max; row_no++) {
+//				row = sheet.getRow(row_no);
+//				for(int cell_no = 0; cell_no <= cell_no_max; cell_no++) {
+//					cell = row.getCell(cell_no);
+//					data[row_no][cell_no] = cell_value(cell);
+//				}
+//			}
+//			
+//		} catch (Exception e) {
+//			log.error("exception=", e);
+//		}
+//		
+//		return data;
+//	}
 	
 	public static byte[] write(
 			String request_code
