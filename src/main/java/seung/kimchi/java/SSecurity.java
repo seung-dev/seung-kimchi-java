@@ -1,9 +1,11 @@
 package seung.kimchi.java;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
@@ -360,12 +362,12 @@ public class SSecurity {
 	public static Key read_pem_private(
 			String algorithm
 			, String provider
-			, String file_path
+			, byte[] pem
 			) {
 		Key key = null;
 		try(
-				FileReader fileReader = new FileReader(new File(file_path));
-				PemReader pemReader = new PemReader(fileReader);
+				Reader reader = new InputStreamReader(new ByteArrayInputStream(pem));
+				PemReader pemReader = new PemReader(reader);
 				) {
 			PemObject pemObject= pemReader.readPemObject();
 			byte[] content = pemObject.getContent();
@@ -381,12 +383,12 @@ public class SSecurity {
 	public static Key read_pem_public(
 			String algorithm
 			, String provider
-			, String file_path
+			, byte[] pem
 			) {
 		Key key = null;
 		try(
-				FileReader fileReader = new FileReader(new File(file_path));
-				PemReader pemReader = new PemReader(fileReader);
+				Reader reader = new InputStreamReader(new ByteArrayInputStream(pem));
+				PemReader pemReader = new PemReader(reader);
 				) {
 			PemObject pemObject= pemReader.readPemObject();
 			byte[] content = pemObject.getContent();
