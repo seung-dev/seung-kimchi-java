@@ -1,15 +1,26 @@
 package seung.kimchi.java;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Provider;
+import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +29,14 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
+import org.bouncycastle.util.io.pem.PemWriter;
 
 import lombok.extern.slf4j.Slf4j;
 import seung.kimchi.java.utils.SAlgorithm;
@@ -52,6 +68,61 @@ public class SSecurity {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * 복호화
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   data - 자료
+	 *   transformation - AES/CBC/PKCS5Padding, RSA/ECB/OAEPWithSHA-256AndMGF1Padding, ...
+	 *   provider - BouncyCastleProvider.PROVIDER_NAME(BC), ...
+	 *   key - {@link SecretKeySpec}
+	 *   iv_size - IV 길이
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 *   iv[iv_size] + encrypted[]
+	 * </pre>
+	 */
+	public static byte[] decrypt(
+			byte[] data
+			, String transformation
+			, String provider
+			, Key key
+			, int iv_size
+			) {
+		ByteBuffer byteBuffer = ByteBuffer.wrap(data);
+		byte[] iv = new byte[iv_size];
+		byteBuffer.get(iv);
+		byte[] encrypted = new byte[byteBuffer.remaining()];
+		byteBuffer.get(encrypted);
+		return decrypt(
+				encrypted//data
+				, transformation
+				, provider
+				, key
+				, iv
+				);
+	}
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * 복호화
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   data - 자료
+	 *   transformation - AES/CBC/PKCS5Padding, RSA/ECB/OAEPWithSHA-256AndMGF1Padding, ...
+	 *   provider - BouncyCastleProvider.PROVIDER_NAME(BC), ...
+	 *   key - {@link SecretKeySpec}
+	 *   algorithm_parameter_spec - {@link IvParameterSpec}, {@link OAEPParameterSpec}, ...
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 * </pre>
+	 */
 	public static byte[] decrypt(
 			byte[] encrypted
 			, String transformation
@@ -60,14 +131,23 @@ public class SSecurity {
 			, String algorithm
 			, byte[] iv
 			) {
-		return decrypt(encrypted, transformation, provider, generateSecretKeySpec(key, algorithm), generateIvParameterSpec(iv));
+		return decrypt(encrypted, transformation, provider, secret_key_spec(key, algorithm), iv_parameter_spec(iv));
+	}
+	public static byte[] decrypt(
+			byte[] data
+			, String transformation
+			, String provider
+			, Key key
+			, byte[] iv
+			) {
+		return decrypt(data, transformation, provider, key, iv_parameter_spec(iv));
 	}
 	public static byte[] decrypt(
 			byte[] encrypted
 			, String transformation
 			, String provider
 			, Key key
-			, AlgorithmParameterSpec algorithmParameterSpec
+			, AlgorithmParameterSpec algorithm_parameter_spec
 			) {
 		
 		byte[] decrypted = null;
@@ -81,7 +161,7 @@ public class SSecurity {
 				cipher = Cipher.getInstance(transformation);
 			}
 			
-			cipher.init(Cipher.DECRYPT_MODE, key, algorithmParameterSpec);
+			cipher.init(Cipher.DECRYPT_MODE, key, algorithm_parameter_spec);
 			
 			decrypted = cipher.doFinal(encrypted);
 			
@@ -104,6 +184,56 @@ public class SSecurity {
 		return decrypted;
 	}
 	
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * 암호화
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   data - 자료
+	 *   transformation - AES/CBC/PKCS5Padding, RSA/ECB/OAEPWithSHA-256AndMGF1Padding, ...
+	 *   provider - BouncyCastleProvider.PROVIDER_NAME(BC), ...
+	 *   key - {@link SecretKeySpec}
+	 *   iv_size - IV 길이 {@link RSA_OAEP_T.secure_random_iv}
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 *   iv[iv_size] + encrypted[]
+	 * </pre>
+	 */
+	public static byte[] encrypt(
+			byte[] data
+			, String transformation
+			, String provider
+			, Key key
+			, int iv_size
+			) {
+		byte[] iv = secure_random_iv(iv_size);
+		byte[] encrypted = encrypt(data, transformation, provider, key, iv);
+		return ByteBuffer.allocate(iv.length + encrypted.length)
+				.put(iv)
+				.put(encrypted)
+				.array()
+				;
+	}
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * 암호화
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   data - 자료
+	 *   transformation - AES/CBC/PKCS5Padding, RSA/ECB/OAEPWithSHA-256AndMGF1Padding, ...
+	 *   provider - BouncyCastleProvider.PROVIDER_NAME(BC), ...
+	 *   key - {@link SecretKeySpec}
+	 *   algorithm_parameter_spec - {@link IvParameterSpec}, {@link OAEPParameterSpec}, ...
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 * </pre>
+	 */
 	public static byte[] encrypt(
 			byte[] data
 			, String transformation
@@ -112,14 +242,23 @@ public class SSecurity {
 			, String algorithm
 			, byte[] iv
 			) {
-		return encrypt(data, transformation, provider, generateSecretKeySpec(key, algorithm), generateIvParameterSpec(iv));
+		return encrypt(data, transformation, provider, secret_key_spec(key, algorithm), iv_parameter_spec(iv));
 	}
 	public static byte[] encrypt(
 			byte[] data
 			, String transformation
 			, String provider
 			, Key key
-			, AlgorithmParameterSpec algorithmParameterSpec
+			, byte[] iv
+			) {
+		return encrypt(data, transformation, provider, key, iv_parameter_spec(iv));
+	}
+	public static byte[] encrypt(
+			byte[] data
+			, String transformation
+			, String provider
+			, Key key
+			, AlgorithmParameterSpec algorithm_parameter_spec
 			) {
 		
 		byte[] encrypted = null;
@@ -133,7 +272,7 @@ public class SSecurity {
 				cipher = Cipher.getInstance(transformation);
 			}
 			
-			cipher.init(Cipher.ENCRYPT_MODE, key, algorithmParameterSpec);
+			cipher.init(Cipher.ENCRYPT_MODE, key, algorithm_parameter_spec);
 			
 			encrypted = cipher.doFinal(data);
 			
@@ -156,18 +295,153 @@ public class SSecurity {
 		return encrypted;
 	}
 	
-	public static AlgorithmParameterSpec generateIvParameterSpec(
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * IV 생성
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   iv - 
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 * </pre>
+	 */
+	public static AlgorithmParameterSpec iv_parameter_spec(
 			byte[] iv
 			) {
 		return new IvParameterSpec(iv);
 	}
 	
-	public static SecretKeySpec generateSecretKeySpec(
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * 랜덤 IV 생성
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   iv_size - 랜덤 백터 크기
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 * </pre>
+	 */
+	public static byte[] secure_random_iv(
+			int iv_size
+			) {
+		SecureRandom secureRandom = new SecureRandom();
+		byte[] iv = new byte[iv_size];
+		secureRandom.nextBytes(iv);
+		return iv;
+	}
+	
+	/**
+	 * <h1>Description</h1>
+	 * <pre>
+	 * 암복호화 키 생성
+	 * </pre>
+	 * <h1>Request</h1>
+	 * <pre>
+	 *   key - 키
+	 *   algorithm - AES, SEED, ...
+	 * </pre>
+	 * <h1>Response</h1>
+	 * <pre>
+	 * </pre>
+	 */
+	public static SecretKeySpec secret_key_spec(
 			byte[] key
 			, String algorithm
 			) {
 		return new SecretKeySpec(key, algorithm);
 	}
+	
+	public static Key read_pem_private(
+			String algorithm
+			, String provider
+			, String file_path
+			) {
+		Key key = null;
+		try(
+				FileReader fileReader = new FileReader(new File(file_path));
+				PemReader pemReader = new PemReader(fileReader);
+				) {
+			PemObject pemObject= pemReader.readPemObject();
+			byte[] content = pemObject.getContent();
+			PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(content);
+			KeyFactory keyFactory = KeyFactory.getInstance(algorithm, provider);
+			key = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+		} catch (Exception e) {
+			log.error("Failed to read pem formatted file.", e);
+		}
+		return key;
+	}
+	
+	public static Key read_pem_public(
+			String algorithm
+			, String provider
+			, String file_path
+			) {
+		Key key = null;
+		try(
+				FileReader fileReader = new FileReader(new File(file_path));
+				PemReader pemReader = new PemReader(fileReader);
+				) {
+			PemObject pemObject= pemReader.readPemObject();
+			byte[] content = pemObject.getContent();
+			X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(content);
+			KeyFactory keyFactory = KeyFactory.getInstance(algorithm, provider);
+			key = keyFactory.generatePublic(x509EncodedKeySpec);
+		} catch (Exception e) {
+			log.error("Failed to read pem formatted file.", e);
+		}
+		return key;
+	}
+	
+	public static Long write_pem(
+			String file_path
+			, String file_name
+			, String type
+			, byte[] content
+			) {
+		long file_size = -1;
+		try(
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				PemWriter pemWriter = new PemWriter(new OutputStreamWriter(byteArrayOutputStream));
+				) {
+			pemWriter.writeObject(new PemObject(type, content));
+			pemWriter.flush();
+			File key_file = new File(String.format("%s/%s", file_path, file_name));
+			FileUtils.writeByteArrayToFile(key_file, byteArrayOutputStream.toByteArray());
+			if(key_file.exists() && key_file.isFile()) {
+				file_size = key_file.length();
+			}
+			pemWriter.close();
+		} catch (Exception e) {
+			log.error("Failed to convert to pem formatted file.", e);
+		}
+		return file_size;
+	}
+	
+	public static KeyPair keypair(
+			String algorithm
+			, String provider
+			, int asymmetric_key_size
+			) throws NoSuchAlgorithmException, NoSuchProviderException {
+		
+		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
+				algorithm
+				, provider
+				);
+		
+		keyPairGenerator.initialize(
+				asymmetric_key_size
+				, new SecureRandom()
+				);
+		
+		return keyPairGenerator.generateKeyPair();
+	}// end of keypair
 	
 	/**
 	 * <h1>Description</h1>
@@ -352,16 +626,16 @@ public class SSecurity {
 			, byte[] data
 			) {
 		byte[] digest = data.clone();
-		MessageDigest messageDigest;
+		MessageDigest message_digest;
 		try {
 			if(provider != null && !"".equals(provider)) {
-				messageDigest = MessageDigest.getInstance(algorithm, provider);
+				message_digest = MessageDigest.getInstance(algorithm, provider);
 			} else {
-				messageDigest = MessageDigest.getInstance(algorithm);
+				message_digest = MessageDigest.getInstance(algorithm);
 			}
 			for(int i = 0; i < iteration; i++) {
-				messageDigest.update(digest);
-				digest = messageDigest.digest();
+				message_digest.update(digest);
+				digest = message_digest.digest();
 			}
 		} catch (NoSuchAlgorithmException e) {
 			log.error("Failed to digest data.", e);
@@ -372,19 +646,19 @@ public class SSecurity {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static SLinkedHashMap availableAlgorithms() {
+	public static SLinkedHashMap available_algorithms() {
 		SLinkedHashMap algorithms = new SLinkedHashMap();
-		for(String serviceName : availableServiceName()) {
-			algorithms.put(serviceName, getAlgorithms(serviceName));
+		for(String service_name : available_service_name()) {
+			algorithms.put(service_name, algorithms(service_name));
 		}
 		return algorithms;
 	}
 	
-	public static List<String> getAlgorithms(String serviceName) {
-		return new ArrayList<>(Security.getAlgorithms(serviceName));
+	public static List<String> algorithms(String service_name) {
+		return new ArrayList<>(Security.getAlgorithms(service_name));
 	}
 	
-	public static List<String> availableServiceName() {
+	public static List<String> available_service_name() {
 		List<String> types = new ArrayList<>();
 		for(Provider provider : Security.getProviders()) {
 			provider.getServices().stream().forEach(s -> {
@@ -396,14 +670,14 @@ public class SSecurity {
 		return types;
 	}
 	
-	public static List<SLinkedHashMap> availableProviders() {
+	public static List<SLinkedHashMap> available_providers() {
 		List<SLinkedHashMap> providers = new ArrayList<>();
 		for(Provider provider : Security.getProviders()) {
 			List<SLinkedHashMap> service = new ArrayList<>();
 			provider.getServices().stream().forEach(s -> {
 				service.add(new SLinkedHashMap()
 						.add("type", s.getType())
-						.add("className", s.getClassName())
+						.add("class_name", s.getClassName())
 						.add("algorithm", s.getAlgorithm())
 						);
 			});
@@ -418,7 +692,7 @@ public class SSecurity {
 		return providers;
 	}
 	
-	public static int addBouncyCastleProvider() {
+	public static int add_bouncy_castle_provider() {
 		if(Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new BouncyCastleProvider());
 		}
