@@ -289,7 +289,7 @@ public class SXlsx {
 		if(CellType.STRING == cell.getCellTypeEnum()) {
 			cell_value = cell.getStringCellValue();
 		} else if(CellType.NUMERIC == cell.getCellTypeEnum()) {
-			cell_value = cell.getStringCellValue();
+			cell_value = Double.toString(cell.getNumericCellValue());
 		} else if(CellType.BOOLEAN == cell.getCellTypeEnum()) {
 			if(DateUtil.isCellDateFormatted(cell)) {
 				cell_value = "" + cell.getDateCellValue();
