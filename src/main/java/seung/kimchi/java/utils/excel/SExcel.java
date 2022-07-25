@@ -43,6 +43,7 @@ public class SExcel implements Serializable {
 	private String error_message;
 	
 	private int numberOfSheets;
+	
 	@Builder.Default
 	private List<SSheet> sheets = new ArrayList<>();
 	
