@@ -289,13 +289,13 @@ public class SXlsx {
 		if(CellType.STRING == cell.getCellTypeEnum()) {
 			cell_value = cell.getStringCellValue();
 		} else if(CellType.NUMERIC == cell.getCellTypeEnum()) {
-			cell_value = Double.toString(cell.getNumericCellValue());
-		} else if(CellType.BOOLEAN == cell.getCellTypeEnum()) {
 			if(DateUtil.isCellDateFormatted(cell)) {
 				cell_value = "" + cell.getDateCellValue();
 			} else {
 				cell_value = NumberToTextConverter.toText(cell.getNumericCellValue());
 			}
+		} else if(CellType.BOOLEAN == cell.getCellTypeEnum()) {
+			cell_value = Boolean.toString(cell.getBooleanCellValue());
 		} else if(CellType.FORMULA == cell.getCellTypeEnum()) {
 			cell_value = cell.getCellFormula();
 		} else if(CellType.BLANK == cell.getCellTypeEnum()) {
