@@ -25,6 +25,92 @@ public class SText {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * <h1>Description</h1>
+	 * <pre>{@code
+	 * Convert to Full Width Characters.
+	 * }</pre>
+	 * <h1>Usage</h1>
+	 * <pre>{@code
+	 * System.out.println(SText.to_half_width("()"));
+	 * }</pre>
+	 * <hr>
+	 * @param text
+	 * @author seung
+	 * @since 2022.08.08
+	 * @version 1.0.0
+	 */
+	public static String to_full_width(String text) {
+		
+		if(text == null) {
+			return text;
+		}
+		
+		if("".equals(text)) {
+			return text;
+		}
+		
+		char[] characters = text.toCharArray();
+		char[] full_width = new char[characters.length];
+		
+		for(int i = 0; i < characters.length; i++) {
+			if(characters[i] == 32) {
+				full_width[i] = (char) 12288;
+				continue;
+			}
+			if(characters[i] < 127) {
+				full_width[i] = (char) (characters[i] + 65248);
+				continue;
+			}
+			full_width[i] = characters[i];
+		}// end of characters
+		
+		return new String(full_width);
+	}
+	
+	/**
+	 * <h1>Description</h1>
+	 * <pre>{@code
+	 * Convert to Half Width Characters.
+	 * }</pre>
+	 * <h1>Usage</h1>
+	 * <pre>{@code
+	 * System.out.println(SText.to_half_width("（）"));
+	 * }</pre>
+	 * <hr>
+	 * @param text
+	 * @author seung
+	 * @since 2022.08.08
+	 * @version 1.0.0
+	 */
+	public static String to_half_width(String text) {
+		
+		if(text == null) {
+			return text;
+		}
+		
+		if("".equals(text)) {
+			return text;
+		}
+		
+		char[] characters = text.toCharArray();
+		char[] half_width = new char[characters.length];
+		
+		for(int i = 0; i < characters.length; i++) {
+			if(characters[i] == 12288) {
+				half_width[i] = (char) 32;
+				continue;
+			}
+			if(characters[i] > 65280  && characters[i] < 65375) {
+				half_width[i] = (char) (characters[i] - 65248);
+				continue;
+			}
+			half_width[i] = characters[i];
+		}// end of characters
+		
+		return new String(half_width);
+	}
+	
 	public static String random(int min, int max, int maxLength, String padChar) {
 		int no = new Random().nextInt(max - min + 1) + min;
 		return pad(_PAD_RIGHT, "" + no, maxLength, padChar);
