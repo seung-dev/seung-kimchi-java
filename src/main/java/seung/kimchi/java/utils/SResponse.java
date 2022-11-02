@@ -57,8 +57,16 @@ public class SResponse {
 	private String error_message = "";
 	
 	@Builder.Default
+	private SLinkedHashMap payload = new SLinkedHashMap();
+	
+	@Builder.Default
+	private SLinkedHashMap data = new SLinkedHashMap();
+	
+	@Deprecated
+	@Builder.Default
 	private Object request = new SLinkedHashMap();
 	
+	@Deprecated
 	@Builder.Default
 	private SLinkedHashMap response = new SLinkedHashMap();
 	
@@ -71,15 +79,15 @@ public class SResponse {
 	
 	@SuppressWarnings("unchecked")
 	public void put(Object key, Object value) {
-		this.response.put(key, value);
+		this.data.put(key, value);
 	}
 	
 	public String getString(Object key, String defaultValue) {
-		return this.response.getString(key, defaultValue);
+		return this.data.getString(key, defaultValue);
 	}
 	
 	public int getInt(Object key, int defaultValue) {
-		return this.response.getInt(key, defaultValue);
+		return this.data.getInt(key, defaultValue);
 	}
 	
 	public void success() {
