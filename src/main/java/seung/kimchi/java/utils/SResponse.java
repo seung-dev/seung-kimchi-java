@@ -57,37 +57,20 @@ public class SResponse {
 	private String error_message = "";
 	
 	@Builder.Default
-	private SLinkedHashMap payload = new SLinkedHashMap();
-	
-	@Builder.Default
 	private SLinkedHashMap data = new SLinkedHashMap();
 	
-	@Deprecated
-	@Builder.Default
-	private Object request = new SLinkedHashMap();
-	
-	@Deprecated
-	@Builder.Default
-	private SLinkedHashMap response = new SLinkedHashMap();
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void add(Map map) {
+	public SResponse merge(Map map) {
 		if(map != null) {
-			this.response.putAll(map);
+			this.data.putAll(map);
 		}
+		return this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void put(Object key, Object value) {
+	public SResponse add(Object key, Object value) {
 		this.data.put(key, value);
-	}
-	
-	public String getString(Object key, String defaultValue) {
-		return this.data.getString(key, defaultValue);
-	}
-	
-	public int getInt(Object key, int defaultValue) {
-		return this.data.getInt(key, defaultValue);
+		return this;
 	}
 	
 	public void success() {
@@ -131,6 +114,38 @@ public class SResponse {
 	public void done() {
 		this.response_time = new Date().getTime();
 		this.elapsed_time = response_time - request_time;
+	}
+	
+	@Deprecated
+	@Builder.Default
+	private Object request = new SLinkedHashMap();
+	
+	@Deprecated
+	@Builder.Default
+	private SLinkedHashMap response = new SLinkedHashMap();
+	
+	@Deprecated
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void add(Map map) {
+		if(map != null) {
+			this.response.putAll(map);
+		}
+	}
+	
+	@Deprecated
+	@SuppressWarnings("unchecked")
+	public void put(Object key, Object value) {
+		this.response.put(key, value);
+	}
+	
+	@Deprecated
+	public String getString(Object key, String defaultValue) {
+		return this.response.getString(key, defaultValue);
+	}
+	
+	@Deprecated
+	public int getInt(Object key, int defaultValue) {
+		return this.response.getInt(key, defaultValue);
 	}
 	
 }
