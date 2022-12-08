@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -36,13 +36,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.Arrays;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
 import lombok.extern.slf4j.Slf4j;
 import seung.kimchi.java.utils.SAlgorithm;
-import seung.kimchi.java.utils.SCharset;
 import seung.kimchi.java.utils.SLinkedHashMap;
 
 @Slf4j
@@ -66,8 +66,131 @@ public class SSecurity {
 	public final static String _ALG_PADDING_PKCS5 = "PKCS5Padding";
 	public final static String _ALG_PADDING_SSL3 = "SSL3Padding";
 	
+	private static final int _XXTEA_DELTA = 0x9E3779B9;
+	private static final int _XXTEA_BLOCK_SIZE = 8;
+	
 	public SSecurity() {
-		// TODO Auto-generated constructor stub
+	}
+	
+	public static byte[] xxtea_decrypt(byte[] key, byte[] encrypted) {
+		if(key == null || key.length < 16) {
+			return null;
+		}
+		if(encrypted == null) {
+			return null;
+		}
+		if(key.length > 16) {
+			key = Arrays.copyOfRange(key, 0, 16);
+		}
+		return xxtea_byte_array(
+				xxtea_decrypt(
+						xxtea_int_array(key)//k
+						, xxtea_int_array(encrypted)//v
+						)
+				);
+	}
+	public static int[] xxtea_decrypt(int[] k, int[] v) {
+		int n = v.length;
+		int q = (int) Math.floor(6 + 52 / n);
+		int z = v[n - 1], y = v[0];
+		int mx, e, sum = Long.valueOf(q * _XXTEA_DELTA).intValue();
+		while(sum != 0) {
+			e = sum >>> 2 & 3;
+			for(int p = n - 1; p >= 0; p--) {
+				z = v[p > 0 ? p - 1 : n - 1];
+				mx = ((int) z >>> 5 ^ (int) y << 2) + ((int) y >>> 3 ^ (int) z << 4) ^ (sum ^ (int) y) + ((int) k[p & 3 ^ e] ^ (int) z);
+				y = v[p] -= mx;
+			}
+			sum -= _XXTEA_DELTA;
+		}
+		return v;
+	}
+	
+	public static byte[] xxtea_encrypt(String key, String plain_text) {
+		byte[] key_bytes = key.getBytes();
+		byte[] plain_text_bytes = plain_text.getBytes();
+		return xxtea_encrypt(
+				key_bytes//k
+				, plain_text_bytes//v
+				);
+	}
+	public static byte[] xxtea_encrypt(byte[] key, byte[] plain_text) {
+		if(key == null || key.length < 16) {
+			return null;
+		}
+		if(plain_text == null) {
+			return null;
+		}
+		if(key.length > 16) {
+			key = Arrays.copyOfRange(key, 0, 16);
+		}
+		return xxtea_byte_array(
+				xxtea_encrypt(
+						xxtea_int_array(key)//k
+						, xxtea_int_array(plain_text)//v
+						)
+				);
+	}
+	public static int[] xxtea_encrypt(int[] k, int[] v) {
+		int n = v.length;
+		int q = (int) Math.floor(6 + 52 / n);
+		int z = v[n - 1];
+		int y = v[0];
+		int mx = 0;
+		int e = 0;
+		int sum = 0;
+		while(q-- > 0) {
+			sum += _XXTEA_DELTA;
+			e = (int) sum >>> 2 & 3;
+			for(int p = 0; p < n; p++) {
+				y = v[(p + 1) % n];
+				mx = ((int) z >>> 5 ^ (int) y << 2) + ((int) y >>> 3 ^ (int) z << 4) ^ ((int) sum ^ (int) y) + ((int) k[p & 3 ^ e] ^ (int) z);
+				z = v[p] += mx;
+			}
+		}
+		return v;
+	}
+	
+	public static int[] xxtea_int_array(String data) {
+		int data_length = data.length();
+		int[] int_array = new int[(int) (Math.ceil(data_length / 4d))];
+		for(int i = 0; i < int_array.length; i++) {
+			int_array[i] = data.charAt(i * 4);
+			for(int j = 1; j < 4; j++) {
+				if(i * 4 + j < data_length) {
+					int_array[i] += (data.charAt(i * 4 + j) << (j * _XXTEA_BLOCK_SIZE));
+				}
+			}
+		}
+		return int_array;
+	}
+	public static int[] xxtea_int_array(byte[] data) {
+		int data_length = data.length;
+		int[] int_array = new int[(data_length & 3) == 0 ? data_length >>> 2 : (data_length >>> 2) + 1];
+		for(int i = 0; i < data_length; i++) {
+			int_array[i >>> 2] |= (0x000000ff & data[i]) << ((i & 3) << 3);
+		}
+		return int_array;
+	}
+	
+	public static byte[] xxtea_byte_array(int[] int_array) {
+		int byte_size = int_array.length << 2;
+		byte[] byte_array = new byte[int_array.length << 2];
+		for(int i = 0; i < byte_size; i++) {
+			byte_array[i] = (byte) (int_array[i >>> 2] >>> ((i & 3) << 3));
+		}
+		return byte_array;
+	}
+	public static byte[] xxtea_byte_array0(int[] int_array) {
+		int int_array_length = int_array.length;
+		byte[] byte_array = new byte[int_array.length * 4];
+		for(int i = 0; i < int_array_length; i++) {
+			byte_array[i * 4] = Long.valueOf((int_array[i] & 0xff)).byteValue();
+			for(int j = 1; j < 4; j++) {
+				byte_array[i * 4 + j] = Long.valueOf((int_array[i] >>> (j * _XXTEA_BLOCK_SIZE) & 0xff)).byteValue();
+			}
+		}
+		return byte_array;
 	}
 	
 	/**
@@ -470,7 +593,7 @@ public class SSecurity {
 	 *     SAlgorithm._MD5
 	 *     , ""
 	 *     , 1
-	 *     , SConvert.stringify(data).getBytes(SCharset._UTF_8)
+	 *     , SConvert.stringify(data).getBytes(StandardCharsets.UTF_8)
 	 *     )
 	 *   , true
 	 *   );
@@ -489,13 +612,7 @@ public class SSecurity {
 			String algorithm
 			, Object data
 			) {
-		String digested = "";
-		try {
-			digested = SConvert.encodeHexString(digest(algorithm, "", 1, SConvert.stringify(data).getBytes(SCharset._UTF_8)), true);
-		} catch (UnsupportedEncodingException e) {
-			log.error("Failed to digest data.", e);
-		}
-		return digested;
+		return SConvert.encodeHexString(digest(algorithm, "", 1, SConvert.stringify(data).getBytes(StandardCharsets.UTF_8)));
 	}
 	/**
 	 * <h1>Description</h1>
@@ -694,11 +811,10 @@ public class SSecurity {
 		return providers;
 	}
 	
-	public static int add_bouncy_castle_provider() {
+	public static void add_bouncy_castle_provider() {
 		if(Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new BouncyCastleProvider());
 		}
-		return 1;
 	}
 	
 }

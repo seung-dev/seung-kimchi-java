@@ -8,9 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import lombok.extern.slf4j.Slf4j;
-import seung.kimchi.java.utils.SCharset;
 import seung.kimchi.java.utils.SLinkedHashMap;
 
 @Slf4j
@@ -264,25 +263,19 @@ public class SConvert {
 	 * <pre>{@code
 	 * String decoded = SConvert.decodeBase64String(
 	 *   "ZGF0YQ=="
-	 *   , SCharset._UTF_8
-	 *   );
+	 *   , StandardCharsets.UTF_8
+	 * );
 	 * System.out.println(decoded);
 	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @see SConvert#decodeBase64String(byte[], String)
+	 * @see SConvert#decodeBase64String(byte[], Charset)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
 	public static String decodeBase64String(String encoded) {
-		String data = "";
-		try {
-			data = decodeBase64String(encoded.getBytes(SCharset._UTF_8), SCharset._UTF_8);
-		} catch (UnsupportedEncodingException e) {
-			log.error("Failed to decode encoded data.", e);
-		}
-		return data;
+		return decodeBase64String(encoded.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
 	}
 	/**
 	 * <h1>Description</h1>
@@ -293,28 +286,28 @@ public class SConvert {
 	 * <pre>{@code
 	 * String decoded = SConvert.decodeBase64String(
 	 *   "ZGF0YQ==".getBytes()
-	 *   , SCharset._UTF_8
-	 *   );
+	 *   , StandardCharsets.UTF_8.name()
+	 * );
 	 * System.out.println(decoded);
 	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
-	 * @see SConvert#decodeBase64String(byte[], String)
+	 * @param charset_name
+	 * @see SConvert#decodeBase64String(byte[], Charset)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
-	public static String decodeBase64String(byte[] encoded, String charset) {
-		String data = "";
-		try {
-			data = new String(decodeBase64(encoded), charset);
-		} catch (UnsupportedEncodingException e) {
-			log.error("Failed to convert to base64 decoded data.", e);
-		}
-		return data;
+	public static String decodeBase64String(byte[] encoded, String charset_name) {
+		return new String(decodeBase64(encoded), Charset.forName(charset_name));
 	}
-	public static byte[] decodeBase64(String encoded, String charset) throws UnsupportedEncodingException {
+	public static String decodeBase64String(byte[] encoded, Charset charset) {
+		return new String(decodeBase64(encoded), charset);
+	}
+	public static byte[] decodeBase64(String encoded, String charset_name) {
+		return Base64.decodeBase64(encoded.getBytes(Charset.forName(charset_name)));
+	}
+	public static byte[] decodeBase64(String encoded, Charset charset) {
 		return Base64.decodeBase64(encoded.getBytes(charset));
 	}
 	/**
@@ -326,7 +319,7 @@ public class SConvert {
 	 * <pre>{@code
 	 * byte[] decoded = SConvert.decodeBase64(
 	 *   "ZGF0YQ==".getBytes()
-	 *   );
+	 * );
 	 * for(byte b : decoded) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
@@ -351,26 +344,23 @@ public class SConvert {
 	 * <pre>{@code
 	 * String encoded = SConvert.encodeBase64String(
 	 *   "data".getBytes()
-	 *   , SCharset._UTF_8
-	 *   );
+	 *   , StandardCharsets.UTF_8.name()
+	 * );
 	 * System.out.println(encoded);
 	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
+	 * @param charset_name
 	 * @see SConvert#encodeBase64(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
-	public static String encodeBase64String(byte[] data, String charset) {
-		String encoded = "";
-		try {
-			encoded = new String(encodeBase64(data), charset);
-		} catch (UnsupportedEncodingException e) {
-			log.error("Failed to convert to base64 encoded data.", e);
-		}
-		return encoded;
+	public static String encodeBase64String(byte[] data, String charset_name) {
+		return new String(encodeBase64(data), Charset.forName(charset_name));
+	}
+	public static String encodeBase64String(byte[] data, Charset charset) {
+		return new String(encodeBase64(data), charset);
 	}
 	/**
 	 * <h1>Description</h1>
@@ -381,7 +371,7 @@ public class SConvert {
 	 * <pre>{@code
 	 * byte[] encoded = SConvert.encodeBase64(
 	 *   "data".getBytes()
-	 *   );
+	 * );
 	 * for(byte b : encoded) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
@@ -413,19 +403,19 @@ public class SConvert {
 	 * <pre>{@code
 	 * String decoded = SConvert.decodeHexString(
 	 *   "64617461"
-	 *   , SCharset._UTF_8
-	 *   );
+	 *   , StandardCharsets.UTF_8
+	 * );
 	 * System.out.println(decoded);
 	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @see SConvert#decodeHexString(String, String)
+	 * @see SConvert#decodeHexString(String, Charset)
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
 	public static String decodeHexString(String encoded) {
-		return decodeHexString(encoded, SCharset._UTF_8);
+		return decodeHexString(encoded, StandardCharsets.UTF_8);
 	}
 	/**
 	 * <h1>Description</h1>
@@ -437,26 +427,22 @@ public class SConvert {
 	 * String decoded = SConvert.decodeHexString(
 	 *   "64617461"
 	 *   , SCharset._UTF_8
-	 *   );
+	 * );
 	 * System.out.println(decoded);
 	 * }</pre>
 	 * <hr>
 	 * @param encoded
-	 * @param charset {@value SCharset#_UTF_8}, {@value SCharset#_EUC_KR}, ...
+	 * @param charset_name
 	 * @see SConvert#decodeHex(String)
-	 * @see SCharset}
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
-	public static String decodeHexString(String encoded, String charset) {
-		String decoded = "";
-		try {
-			decoded = new String(decodeHex(encoded), charset);
-		} catch (UnsupportedEncodingException e) {
-			log.error("Failed to convert to hex decoded data.", e);
-		}
-		return decoded;
+	public static String decodeHexString(String encoded, String charset_name) {
+		return decodeHexString(encoded, Charset.forName(charset_name));
+	}
+	public static String decodeHexString(String encoded, Charset charset) {
+		return new String(decodeHex(encoded), charset);
 	}
 	/**
 	 * <h1>Description</h1>
@@ -467,7 +453,7 @@ public class SConvert {
 	 * <pre>{@code
 	 * byte[] decoded = SConvert.decodeHexString(
 	 *   "64617461"
-	 *   );
+	 * );
 	 * for(byte b : decoded) {
 	 *   System.out.println(b >= 0 ? String.format("%8s", Integer.toBinaryString(b)).replaceAll("\s", "0") : Integer.toBinaryString(b).substring(24));
 	 * }
@@ -498,20 +484,19 @@ public class SConvert {
 	 * <pre>{@code
 	 * String encoded = SConvert.encodeHexString(
 	 *   new BigInteger("1234567890")
-	 *   , true
-	 *   );
+	 * );
 	 * System.out.println(encoded);
 	 * }</pre>
 	 * <hr>
 	 * @param data
 	 * @param toLowerCase
-	 * @see SConvert#encodeHexString(byte[], boolean)
+	 * @see SConvert#encodeHexString(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
-	public static String encodeHexString(BigInteger data, boolean toLowerCase) {
-		return encodeHexString(data.toByteArray(), toLowerCase);
+	public static String encodeHexString(BigInteger data) {
+		return encodeHexString(data.toByteArray());
 	}
 	/**
 	 * <h1>Description</h1>
@@ -522,31 +507,31 @@ public class SConvert {
 	 * <pre>{@code
 	 * String encoded = SConvert.encodeHexString(
 	 *   "data"
-	 *   );
+	 * );
 	 * System.out.println(encoded);
 	 * }</pre>
 	 * <h1>Equal</h1>
 	 * <pre>{@code
 	 * SConvert.encodeHexString(
 	 *   "data"
-	 *   , true
-	 *   );
+	 *   , StandardCharsets.UTF_8
+	 * );
 	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @see SConvert#encodeHexString(byte[], boolean)
+	 * @see SConvert#encodeHexString(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
 	public static String encodeHexString(String data) {
-		String encoded = "";
-		try {
-			return encodeHexString(data.getBytes(SCharset._UTF_8), true);
-		} catch (UnsupportedEncodingException e) {
-			log.error("Failed to convert to hex encoded data.", e);
-		}
-		return encoded;
+		return encodeHexString(data, StandardCharsets.UTF_8);
+	}
+	public static String encodeHexString(String data, String charset_name) {
+		return encodeHexString(data.getBytes(Charset.forName(charset_name)));
+	}
+	public static String encodeHexString(String data, Charset charset) {
+		return encodeHexString(data.getBytes(charset));
 	}
 	/**
 	 * <h1>Description</h1>
@@ -557,27 +542,30 @@ public class SConvert {
 	 * <pre>{@code
 	 * String encoded = SConvert.encodeHexString(
 	 *   "data".getBytes()
-	 *   , true
-	 *   );
+	 * );
 	 * System.out.println(encoded);
 	 * }</pre>
 	 * <hr>
 	 * @param data
-	 * @param toLowerCase
-	 * @see Base64#encodeBase64(byte[])
 	 * @author seung
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
+	public static String encodeHexString(byte[] data) {
+		return encodeHexString(data, true);
+	}
 	public static String encodeHexString(byte[] data, boolean toLowerCase) {
 		return Hex.encodeHexString(data, toLowerCase);
 	}
 	
-	public static String encodeURIComponent(String data, String charset) {
+	public static String encodeURIComponent(String data, Charset charset) {
+		return encodeURIComponent(data, charset.name());
+	}
+	public static String encodeURIComponent(String data, String charset_name) {
 		String encoded = "";
 		try {
 			encoded = URLEncoder
-					.encode(data, charset)
+					.encode(data, charset_name)
 					.replaceAll("\\+", "%20")
 					.replaceAll("\\%21", "!")
 					.replaceAll("\\%27", "'")
@@ -608,8 +596,8 @@ public class SConvert {
 	 * @since 2020.12.21
 	 * @version 1.0.0
 	 */
-	public static Set<String> availableCharset() {
-		return Charset.availableCharsets().keySet();
+	public static String[] availableCharset() {
+		return Charset.availableCharsets().keySet().toArray(new String[0]);
 	}
 	
 }

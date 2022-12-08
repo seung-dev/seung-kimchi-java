@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -190,7 +191,7 @@ public class SFile {
 					file_data = SConvert.decodeHex(entry_file.getString("file_hex"));
 					break;
 				case _ZIP_DATA_TYPE_BASE64:
-					file_data = SConvert.decodeBase64(entry_file.getString("file_base64"), "UTF-8");
+					file_data = SConvert.decodeBase64(entry_file.getString("file_base64"), StandardCharsets.UTF_8.name());
 					break;
 				case _ZIP_DATA_TYPE_BYTES:
 				default:

@@ -202,6 +202,10 @@ public class SCert {
 		
 		ASN1OctetString asn1OctetString = ASN1OctetString.getInstance(x509_certificate.getExtensionValue(Extension.keyUsage.getId()));
 		
+		if(asn1OctetString == null) {
+			return key_usage;
+		}
+		
 		KeyUsage keyUsage = KeyUsage.getInstance(asn1OctetString.getOctets());
 		
 		if(keyUsage.hasUsages(KeyUsage.digitalSignature)) {
@@ -233,6 +237,10 @@ public class SCert {
 		
 		ASN1OctetString asn1OctetString = ASN1OctetString.getInstance(x509_certificate.getExtensionValue(Extension.certificatePolicies.getId()));
 		
+		if(asn1OctetString == null) {
+			return certificate_policy;
+		}
+		
 		CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(asn1OctetString.getOctets());
 		for(PolicyInformation policyInformation : certificatePolicies.getPolicyInformation()) {
 			if(policyInformation == null) {
@@ -250,6 +258,10 @@ public class SCert {
 		String crl_distribution_point = "";
 		
 		ASN1OctetString asn1OctetString = ASN1OctetString.getInstance(x509_certificate.getExtensionValue(Extension.cRLDistributionPoints.getId()));
+		
+		if(asn1OctetString == null) {
+			return crl_distribution_point;
+		}
 		
 		CRLDistPoint crlDistPoint = CRLDistPoint.getInstance(asn1OctetString.getOctets());
 		
@@ -285,6 +297,10 @@ public class SCert {
 		String subject_alternative_name_oid = "";
 		
 		ASN1OctetString asn1OctetString = ASN1OctetString.getInstance(x509_certificate.getExtensionValue(Extension.subjectAlternativeName.getId()));
+		
+		if(asn1OctetString == null) {
+			return subject_alternative_name_oid;
+		}
 		
 		GeneralNames generalNames = GeneralNames.getInstance(asn1OctetString.getOctets());
 		
@@ -651,7 +667,7 @@ public class SCert {
 		return random_number;
 	}
 	
-	public static String generate_vid(String rrn, byte[] random_number, String algorithm) throws IOException {
+	public static byte[] generate_vid(String rrn, byte[] random_number, String algorithm) throws IOException {
 		
 		DERSequence derSequence = new DERSequence(new ASN1Encodable[] {
 				new DERPrintableString(rrn)
@@ -659,9 +675,7 @@ public class SCert {
 		});
 		
 		byte[] digested = SSecurity.digest(algorithm, derSequence.getEncoded());
-		digested = SSecurity.digest(algorithm, digested);
-		
-		return Hex.encodeHexString(digested, true);
+		return SSecurity.digest(algorithm, digested);
 	}
 	
 	public static int verify_vid(
@@ -704,10 +718,13 @@ public class SCert {
 		byte[] random_number = random_number(s_sign_pri_key, password);
 		
 		String sign_cert_der_vid = s_sign_cert_der.getVid();
-		String generate_vid = generate_vid(
-				rrn
-				, random_number
-				, s_sign_cert_der.getVid_hash_algorithm_oid()//algorithm
+		String generate_vid = Hex.encodeHexString(
+				generate_vid(
+						rrn
+						, random_number
+						, s_sign_cert_der.getVid_hash_algorithm_oid()//algorithm
+						)
+				, true
 				);
 		
 		if(sign_cert_der_vid.equals(generate_vid)) {
