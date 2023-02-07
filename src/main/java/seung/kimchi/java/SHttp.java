@@ -1,8 +1,12 @@
 package seung.kimchi.java;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.HashMap;
+
+import org.apache.http.conn.util.InetAddressUtils;
 
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpRequestWithBody;
@@ -43,6 +47,22 @@ public class SHttp {
 //		
 //		return httpResponse;
 //	}
+	
+	public static String nslookup(
+			String host
+			) throws UnknownHostException {
+		
+		String ipv4 = "";
+		
+		InetAddress[] inetAddresses = InetAddress.getAllByName(host);
+		
+		for(InetAddress inetAddress : inetAddresses) {
+			ipv4 = inetAddress.getHostAddress();
+			break;
+		}
+		
+		return ipv4;
+	}
 	
 	public static HttpResponse<byte[]> post(
 			int try_size
