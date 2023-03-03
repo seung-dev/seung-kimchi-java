@@ -6,8 +6,6 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
-import org.apache.http.conn.util.InetAddressUtils;
-
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpRequestWithBody;
 import kong.unirest.HttpResponse;
