@@ -402,9 +402,9 @@ public class SSecurity {
 			}
 			
 			if(algorithm_parameter_spec == null) {
-				cipher.init(Cipher.DECRYPT_MODE, key);
+				cipher.init(Cipher.ENCRYPT_MODE, key);
 			} else {
-				cipher.init(Cipher.DECRYPT_MODE, key, algorithm_parameter_spec);
+				cipher.init(Cipher.ENCRYPT_MODE, key, algorithm_parameter_spec);
 			}
 			
 			encrypted = cipher.doFinal(data);
